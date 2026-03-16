@@ -1,0 +1,52 @@
+[
+    {
+        "unit": "A-row",
+        "content": "ア",
+        "meaning": "a"
+    },
+    {
+        "unit": "A-row",
+        "content": "イ",
+        "meaning": "i"
+    },
+    {
+        "unit": "A-row",
+        "content": "ウ",
+        "meaning": "u"
+    },
+    {
+        "unit": "A-row",
+        "content": "エ",
+        "meaning": "e"
+    },
+    {
+        "unit": "A-row",
+        "content": "オ",
+        "meaning": "o"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "カ",
+        "meaning": "ka"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "キ",
+        "meaning": "ki"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "ク",
+        "meaning": "ku"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "ケ",
+        "meaning": "ke"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "コ",
+        "meaning": "ko"
+    }
+]

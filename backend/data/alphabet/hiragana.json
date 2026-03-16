@@ -1,0 +1,127 @@
+[
+    {
+        "unit": "A-row",
+        "content": "あ",
+        "meaning": "a"
+    },
+    {
+        "unit": "A-row",
+        "content": "い",
+        "meaning": "i"
+    },
+    {
+        "unit": "A-row",
+        "content": "う",
+        "meaning": "u"
+    },
+    {
+        "unit": "A-row",
+        "content": "え",
+        "meaning": "e"
+    },
+    {
+        "unit": "A-row",
+        "content": "お",
+        "meaning": "o"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "か",
+        "meaning": "ka"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "き",
+        "meaning": "ki"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "く",
+        "meaning": "ku"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "け",
+        "meaning": "ke"
+    },
+    {
+        "unit": "Ka-row",
+        "content": "こ",
+        "meaning": "ko"
+    },
+    {
+        "unit": "Sa-row",
+        "content": "さ",
+        "meaning": "sa"
+    },
+    {
+        "unit": "Sa-row",
+        "content": "し",
+        "meaning": "shi"
+    },
+    {
+        "unit": "Sa-row",
+        "content": "す",
+        "meaning": "su"
+    },
+    {
+        "unit": "Sa-row",
+        "content": "せ",
+        "meaning": "se"
+    },
+    {
+        "unit": "Sa-row",
+        "content": "そ",
+        "meaning": "so"
+    },
+    {
+        "unit": "Ta-row",
+        "content": "た",
+        "meaning": "ta"
+    },
+    {
+        "unit": "Ta-row",
+        "content": "ち",
+        "meaning": "chi"
+    },
+    {
+        "unit": "Ta-row",
+        "content": "つ",
+        "meaning": "tsu"
+    },
+    {
+        "unit": "Ta-row",
+        "content": "て",
+        "meaning": "te"
+    },
+    {
+        "unit": "Ta-row",
+        "content": "と",
+        "meaning": "to"
+    },
+    {
+        "unit": "Na-row",
+        "content": "な",
+        "meaning": "na"
+    },
+    {
+        "unit": "Na-row",
+        "content": "に",
+        "meaning": "ni"
+    },
+    {
+        "unit": "Na-row",
+        "content": "ぬ",
+        "meaning": "nu"
+    },
+    {
+        "unit": "Na-row",
+        "content": "ね",
+        "meaning": "ne"
+    },
+    {
+        "unit": "Na-row",
+        "content": "の",
+        "meaning": "no"
+    }
+]
