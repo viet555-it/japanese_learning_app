@@ -1,20 +1,29 @@
-const KanaCard = ({ title }) => {
-  const sections = ["Base", "Dakuon", "Yoon", "Foreign sound"];
+import React, { useState } from "react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
+const KanaCard = ({ title, sections }) => {
   return (
-    <div className="bg-gradient-to-r from-zinc-800 to-zinc-700 
-                    rounded-xl p-6 space-y-4">
-      <h3 className="text-xl">{title}</h3>
+    <div className="bg-[#2a2a2a] rounded-xl flex flex-col overflow-hidden border border-white/5">
+      {/* Title Header */}
+      <div className="flex items-center gap-2 p-5 pb-3">
+        <ChevronUp size={18} className="text-gray-400" />
+        <h3 className="text-[19px] font-normal text-[#e5e5e5]">{title}</h3>
+      </div>
 
-      {sections.map((item, index) => (
-        <div
-          key={index}
-          className="border-t border-white/10 py-3 cursor-pointer
-                     hover:text-white transition"
-        >
-          {item}
-        </div>
-      ))}
+      {/* Sections list */}
+      <div className="flex flex-col px-5 pb-5">
+        {sections.map((item, index) => (
+          <div
+            key={index}
+            className={`flex items-center gap-2 py-3 cursor-pointer
+                       hover:text-white transition text-[#d0d0d0] text-lg font-light
+                       ${index !== 0 ? 'border-t border-white/10' : ''}`}
+          >
+            <ChevronDown size={18} className="text-gray-400" />
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

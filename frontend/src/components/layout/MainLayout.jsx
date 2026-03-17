@@ -1,10 +1,12 @@
-import Sidebar from "../components/layout/Sidebar";
+import Sidebar from "./Sidebar";
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen bg-black text-white">
+    <div className="flex h-screen bg-black text-[#e5e5e5] font-sans overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-8">{children}</main>
+      <main className="flex-1 overflow-y-auto">
+        {children}
+      </main>
     </div>
   );
 };

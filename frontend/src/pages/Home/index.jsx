@@ -1,40 +1,39 @@
 import React from "react";
 import ModeCard from "../../components/common/ModeCard";
 import bgImage from "../../assets/images/kanji-bg.png";
+import logo from "../../assets/images/logo.png";
 
 const HomePage = () => {
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center"
+      className="min-h-full h-full w-full bg-cover flex items-center justify-center relative bg-fixed"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Overlay */}
-      <div className="bg-black/70 w-full h-full absolute top-0 left-0" />
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-5xl text-white">
-
-        {/* Hero Section */}
-        <div className="bg-black/80 p-10 rounded-lg mb-10">
-          <h1 className="text-4xl font-semibold mb-4">
-            Welcome to KanjiDo!
-          </h1>
-          <p className="text-lg text-gray-300 leading-relaxed">
-            KanaDojo is an aesthetic, community-made platform for learning
-            Japanese inspired by Duolingo and Monkeytype.  
+      {/* Main Content Modal */}
+      <div className="relative z-10 w-full max-w-[800px] flex flex-col gap-1 mx-4">
+        {/* Top Info Panel */}
+        <div className="bg-[#151515]/95 backdrop-blur-md px-10 py-12 rounded-t-xl rounded-b-sm flex flex-col items-center text-center shadow-lg border border-white/5">
+          <div className="flex items-center gap-4 mb-5">
+            <h1 className="text-4xl font-normal text-white tracking-wide">
+              Welcome to GoJapanese!
+            </h1>
+            <img src={logo} alt="GoJapan logo" className="w-[50px] h-[50px] rounded-full object-cover ml-2 shrink-0 shadow-[0_0_15px_rgba(191,29,44,0.6)]" />
+          </div>
+          <p className="text-xl text-[#b0b0b0] font-light leading-relaxed max-w-2xl">
+            GoJapanese is an aesthetic, community-made platform for learning Japanese inspired by Duolingo and Monkeytype.<br/>
             To begin, pick a dojo below and start training now!
           </p>
         </div>
 
-        {/* Mode Section */}
-        <div className="flex justify-center items-center 
-                bg-black/80 rounded-lg 
-                divide-x divide-white/20">
-          <ModeCard japanese="あ" title="Kana" path="/kana" />
-            <ModeCard japanese="語" title="Vocab" path="/vocab" />
-            <ModeCard japanese="漢字" title="Kanji" path="/kanji" />
+        {/* Mode Cards Panel */}
+        <div className="bg-[#151515]/95 backdrop-blur-md rounded-b-xl rounded-t-sm flex flex-row shadow-lg border border-white/5 overflow-hidden">
+          <ModeCard japanese="あ" title="Kana" path="/kana" borderRight />
+          <ModeCard japanese="語" title="Vocab" path="/vocab" borderRight />
+          <ModeCard japanese="漢字" title="Kanji" path="/kanji" borderRight={false} />
         </div>
-
       </div>
     </div>
   );
