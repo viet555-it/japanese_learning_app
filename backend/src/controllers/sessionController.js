@@ -5,7 +5,7 @@ export const createSession = async (req, res) => {
         const { difficultyMode, quizMode, levelId, categoryId } = req.body;
 
         const [result] = await db.query(
-            `INSERT INTO quiz_session (DifficultyMode, QuizMode, LevelID, CategoryID) 
+            `INSERT INTO quiz_sessions (DifficultyMode, QuizMode, LevelID, CategoryID) 
              VALUES (?, ?, ?, ?)`,
             [difficultyMode, quizMode, levelId, categoryId]
         );

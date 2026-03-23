@@ -31,6 +31,22 @@ async function migrateData() {
     console.log("🚀 Bắt đầu quá trình Migration...");
 
     try {
+        // --- 0. CLEAR EXISTING DATA ---
+        console.log("🧹 Đang dọn dẹp dữ liệu cũ...");
+        await connection.execute('SET FOREIGN_KEY_CHECKS = 0');
+        
+        await connection.execute('TRUNCATE TABLE `statistic`');
+        await connection.execute('TRUNCATE TABLE `quiz_sessions`');
+        await connection.execute('TRUNCATE TABLE `quiz_items`');
+        await connection.execute('TRUNCATE TABLE `quiz`');
+        await connection.execute('TRUNCATE TABLE `vocabulary`');
+        await connection.execute('TRUNCATE TABLE `kanji`');
+        await connection.execute('TRUNCATE TABLE `kana`');
+        await connection.execute('TRUNCATE TABLE `lesson`');
+        
+        await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
+        console.log("✅ Dọn dẹp hoàn tất.");
+
         // --- 1. MIGRATION VOCABULARY AND QUIZZES ---
         const levels = ['n5', 'n4', 'n3', 'n2', 'n1'];
         for (const lvl of levels) {
