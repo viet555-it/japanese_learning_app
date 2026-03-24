@@ -5,6 +5,8 @@ import db from './config/db.js';
 import questionRoutes from './routes/questionRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
 import contentRoutes from './routes/contentRoutes.js';
+import progressRoutes from './routes/progressRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 // Routes
 app.use('/api/questions', questionRoutes);
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api', contentRoutes);
 
 const PORT = process.env.PORT || 5000;

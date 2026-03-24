@@ -2,7 +2,7 @@ import db from '../config/db.js';
 
 /**
  * Get questions for a specific Quiz
- * Based on ERD: Quiz -> Quiz_Items -> (Vocabulary OR Kanji OR Kana)
+ * Quiz -> Quiz_Items -> (Vocabulary OR Kanji OR Kana)
  */
 export const getQuestions = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ export const getQuestions = async (req, res) => {
             return res.status(400).json({ message: "Quiz ID is required" });
         }
 
-        // 1. Get sample item to determine type
+        // Get sample item to determine type
         const [items] = await db.query(
             `SELECT qi.* FROM Quiz_Items qi WHERE qi.QuizID = ? LIMIT 1`,
             [quizId]
@@ -66,7 +66,6 @@ export const getQuestions = async (req, res) => {
 
 /**
  * Get available quizzes - filtered by LessonId
- * Uses 'Lession' to match the ERD table name.
  */
 export const getQuizzes = async (req, res) => {
     try {
@@ -76,7 +75,7 @@ export const getQuizzes = async (req, res) => {
         let params = [];
 
         if (lessonId) {
-            // Join Quiz items back to the Lesson table (Lession)
+            // Join Quiz items back to the Lesson table
             query = `
                 SELECT DISTINCT q.* 
                 FROM Quiz q 
