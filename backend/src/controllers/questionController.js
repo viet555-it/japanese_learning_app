@@ -31,21 +31,24 @@ export const getQuestions = async (req, res) => {
                 SELECT qi.ItemID, v.VocabID, v.Word, v.Furigana, v.Meaning
                 FROM Quiz_Items qi
                 JOIN Vocabulary v ON qi.VocabID = v.VocabID
-                WHERE qi.QuizID = ?`;
+                WHERE qi.QuizID = ?
+                ORDER BY RAND()`;
         } else if (items[0].KanjiID) {
             type = 'Kanji';
             query = `
                 SELECT qi.ItemID, k.KanjiID, k.Character, k.Onyomi, k.Kunyomi, k.Meaning
                 FROM Quiz_Items qi
                 JOIN Kanji k ON qi.KanjiID = k.KanjiID
-                WHERE qi.QuizID = ?`;
+                WHERE qi.QuizID = ?
+                ORDER BY RAND()`;
         } else if (items[0].KanaID) {
             type = 'Kana';
             query = `
                 SELECT qi.ItemID, kn.KanaID, kn.Character, kn.Romaji
                 FROM Quiz_Items qi
                 JOIN Kana kn ON qi.KanaID = kn.KanaID
-                WHERE qi.QuizID = ?`;
+                WHERE qi.QuizID = ?
+                ORDER BY RAND()`;
         }
 
         const [questions] = await db.query(query, [quizId]);

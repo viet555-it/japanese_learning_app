@@ -9,6 +9,11 @@ import LoginPage from "./pages/Authentication/LoginPage";
 import SignUpPage from "./pages/Authentication/SignUpPage";
 import { useAuth } from "./context/AuthContext";
 
+// Training Pages
+import TrainingSetup from "./pages/Training/TrainingSetup";
+import TrainingPlay from "./pages/Training/TrainingPlay";
+import TrainingStats from "./pages/Training/TrainingStats";
+
 // Route wrapper: redirect to login if not authenticated
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -77,6 +82,11 @@ function App() {
           <Route path="/vocab" element={<Vocab />} />
           <Route path="/kanji" element={<Kanji />} />
           <Route path="/progress" element={<ProgressPage />} />
+          
+          {/* New Training Routes */}
+          <Route path="/training/setup" element={<TrainingSetup />} />
+          <Route path="/training/play" element={<TrainingPlay />} />
+          <Route path="/training/stats" element={<TrainingStats />} />
         </Routes>
       </MainLayout>
     </ProtectedRoute>

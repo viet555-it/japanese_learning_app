@@ -1,41 +1,69 @@
-import React, { useState } from 'react';
-import { ChevronUp, ChevronDown, MousePointer2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronUp, ChevronDown, MousePointer2, Zap, Sword, Play } from 'lucide-react';
+import { getLessons } from '../../api/learningApi';
+import { useNavigate } from 'react-router-dom';
 
-const GroupCard = ({ title, items, selected, onSelect }) => {
-  const [open, setOpen] = useState(true);
+const kanaData = {
+  hiragana: {
+    title: 'Hiragana ひらがな',
+    groups: [
+      { id: 'h_base', name: 'Base', rows: [ 'a • i • u • e • o', 'ka • ki • ku • ke • ko', 'sa • shi • su • se • so', 'ta • chi • tsu • te • to', 'na • ni • nu • ne • no', 'ha • hi • fu • he • ho', 'ma • mi • mu • me • mo', 'ya • yu • yo', 'ra • ri • ru • re • ro', 'wa • wo • n' ] },
+      { id: 'h_dakuon', name: 'Dakuon', rows: [ 'ga • gi • gu • ge • go', 'za • ji • zu • ze • zo', 'da • ji • zu • de • do', 'ba • bi • bu • be • bo', 'pa • pi • pu • pe • po' ] },
+      { id: 'h_yoon', name: 'Yoon', rows: [ 'kya • kyu • kyo', 'gya • gyu • gyo', 'sha • shu • sho', 'ja • ju • jo', 'cha • chu • cho', 'nya • nyu • nyo', 'mya • myu • myo', 'rya • ryu • ryo', 'hya • hyu • hyo', 'bya • byu • byo', 'pya • pyu • pyo' ] }
+    ]
+  },
+  katakana: {
+    title: 'Katakana カタカナ',
+    groups: [
+      { id: 'k_base', name: 'Base', rows: [ 'a • i • u • e • o', 'ka • ki • ku • ke • ko', 'sa • shi • su • se • so', 'ta • chi • tsu • te • to', 'na • ni • nu • ne • no', 'ha • hi • fu • he • ho', 'ma • mi • mu • me • mo', 'ya • yu • yo', 'ra • ri • ru • re • ro', 'wa • wo • n' ] },
+      { id: 'k_dakuon', name: 'Dakuon', rows: [ 'ga • gi • gu • ge • go', 'za • ji • zu • ze • zo', 'da • ji • zu • de • do', 'ba • bi • bu • be • bo', 'pa • pi • pu • pe • po' ] },
+      { id: 'k_yoon', name: 'Yoon', rows: [ 'kya • kyu • kyo', 'gya • gyu • gyo', 'sha • shu • sho', 'ja • ju • jo', 'cha • chu • cho', 'nya • nyu • nyo', 'mya • myu • myo', 'rya • ryu • ryo', 'hya • hyu • hyo', 'bya • byu • byo', 'pya • pyu • pyo' ] },
+      { id: 'k_foreign', name: 'Foreign sound', rows: [ 'fa • fi • fe • fo • fyu', 'wi • we • wo', 'va • vi • vu • ve • vo', 'ti • tu', 'di • du', 'she • shi', 'che • je', 'tsa • tsi • tse • tso' ] }
+    ]
+  }
+};
+
+const GroupSection = ({ group, selectedRows, toggleRow, selectAllInGroup }) => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="bg-[#141414] rounded-xl border border-white/5 flex-1 min-w-0">
-      <div
-        className="flex items-center gap-3 cursor-pointer px-7 py-6 border-b border-white/5"
+    <div className="border-b border-white/10 last:border-none pb-4 mb-4">
+      <div 
+        className="flex items-center gap-2 cursor-pointer mb-3 text-[17px] text-[#ddd] hover:text-white"
         onClick={() => setOpen(!open)}
       >
-        {open
-          ? <ChevronUp size={20} className="text-gray-400 shrink-0" />
-          : <ChevronDown size={20} className="text-gray-400 shrink-0" />
-        }
-        <span className="text-[20px] font-bold text-white">{title}</span>
+        {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        <span>{group.name}</span>
       </div>
-
+      
       {open && (
-        <div className="px-7">
-          {items.map((item, i) => {
-            const isSelected = selected === item.value;
-            return (
-              <div
-                key={item.value}
-                onClick={() => onSelect(item.value)}
-                className={`
-                  flex items-center gap-4 py-6 cursor-pointer transition-colors
-                  ${i < items.length - 1 ? 'border-b border-white/5' : ''}
-                  ${isSelected ? 'text-white' : 'text-[#888] hover:text-white'}
-                `}
-              >
-                <ChevronDown size={18} className={isSelected ? 'text-white shrink-0' : 'text-[#555] shrink-0'} />
-                <span className="text-[20px] font-semibold">{item.label}</span>
+        <div className="pl-6 space-y-3 mb-4">
+          {group.rows.map((row) => (
+            <label key={row} className="flex items-center gap-4 cursor-pointer group">
+              <div className="relative flex items-center justify-center">
+                <input 
+                  type="checkbox" 
+                  checked={selectedRows.includes(row)}
+                  onChange={() => toggleRow(row)}
+                  className="appearance-none w-4 h-4 rounded-sm border border-gray-500 bg-transparent checked:bg-white checked:border-white transition-all cursor-pointer group-hover:border-white"
+                />
+                {selectedRows.includes(row) && (
+                  <svg className="w-3 h-3 text-black absolute pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
               </div>
-            );
-          })}
+              <span className="text-[17px] font-mono text-[#aaa] group-hover:text-white transition-colors">{row}</span>
+            </label>
+          ))}
+          
+          <button 
+            onClick={() => selectAllInGroup(group)}
+            className="w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-lg bg-white text-black font-semibold text-[14px] hover:bg-gray-100 transition-colors"
+          >
+            <MousePointer2 size={16} className="fill-black" />
+            select all {group.name.toLowerCase()}
+          </button>
         </div>
       )}
     </div>
@@ -43,65 +71,169 @@ const GroupCard = ({ title, items, selected, onSelect }) => {
 };
 
 export default function KanaPage() {
-  const [subset, setSubset] = useState('hiragana-base');
+  const navigate = useNavigate();
+  const [welcomeOpen, setWelcomeOpen] = useState(true);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [dbLessonId, setDbLessonId] = useState(null);
+
+  useEffect(() => {
+    // Fetch lessons to just have a valid lesson ID for the game flow
+    const fetchLessons = async () => {
+      try {
+        const data = await getLessons({ type: 'Kana' });
+        if (data && data.length > 0) {
+          setDbLessonId(data[0].LessonID);
+        }
+      } catch (error) {
+        console.error("Failed to fetch kana lessons:", error);
+      }
+    };
+    fetchLessons();
+  }, []);
+
+  const toggleRow = (row) => {
+    setSelectedRows(prev => 
+      prev.includes(row) ? prev.filter(r => r !== row) : [...prev, row]
+    );
+  };
+
+  const selectAllInGroup = (group) => {
+    const allGroupRows = group.rows;
+    const isAllSelected = allGroupRows.every(r => selectedRows.includes(r));
+    
+    if (isAllSelected) {
+      setSelectedRows(prev => prev.filter(r => !allGroupRows.includes(r)));
+    } else {
+      setSelectedRows(prev => {
+        const additional = allGroupRows.filter(r => !prev.includes(r));
+        return [...prev, ...additional];
+      });
+    }
+  };
+
+  const selectAllKana = () => {
+    const allRows = [];
+    kanaData.hiragana.groups.forEach(g => allRows.push(...g.rows));
+    kanaData.katakana.groups.forEach(g => allRows.push(...g.rows));
+    
+    if (selectedRows.length === allRows.length) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(allRows);
+    }
+  };
+
+  const handleStartClassic = () => {
+    if (selectedRows.length === 0) {
+      alert("Please select at least 1 set of characters.");
+      return;
+    }
+    // Proceed if dbLessonId exists. If not, maybe use a default or wait
+    if (dbLessonId) {
+      navigate('/training/setup', { state: { lessonId: dbLessonId, type: 'Kana' } });
+    } else {
+      alert("Still loading learning data, please try again in a moment.");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="px-8 py-8 space-y-5">
+    <div className="min-h-screen bg-[#1f1f1f] text-white flex flex-col relative pb-32 font-sans">
+      <div className="px-8 py-8 space-y-6 flex-1 max-w-6xl w-full">
 
-        {/* Title */}
+        {/* Header */}
         <div className="flex items-center gap-3">
-          <span className="text-[36px]">あ</span>
-          <h1 className="text-[36px] font-bold tracking-tight">Kana</h1>
+          <span className="text-[32px] font-bold">あ</span>
+          <h1 className="text-[32px] font-bold tracking-tight">Kana</h1>
         </div>
 
         {/* Welcome Banner */}
-        <div className="bg-[#141414] rounded-xl border border-white/5 px-7 py-6">
-          <h2 className="text-[20px] font-bold text-white mb-4 flex items-center gap-2">
-            <ChevronUp size={20} className="text-gray-400 shrink-0" />
+        <div className="bg-[#242424] rounded-lg px-6 py-5 cursor-pointer border border-[#303030]" onClick={() => setWelcomeOpen(!welcomeOpen)}>
+          <h2 className="text-[17px] font-semibold text-[#ccc] flex items-center gap-3">
+            {welcomeOpen ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
             Welcome to the Kana(hiragana and katakana)!
           </h2>
-          <div className="text-[#b0b0b0] text-[17px] leading-8 pl-8 space-y-2">
-            <p>This is the place where you can learn and practice the two core syllabaries of Japanese - Hiragana and Katakana.</p>
-            <p>To begin, select at leat 1 set of characters, sellect or change the tranning mode, then hit Go! below and start training now!</p>
-          </div>
+          {welcomeOpen && (
+            <div className="text-[#a0a0a0] text-[15px] leading-relaxed mt-4 pl-8 space-y-2">
+              <p>This is the place where you can learn and practice the two core syllabaries of Japanese - Hiragana and Katakana.</p>
+              <p>To begin, select at least 1 set of characters, select or change the training mode, then hit Go! below and start training now!</p>
+            </div>
+          )}
         </div>
 
         {/* Select All Button */}
         <button
-          onClick={() => setSubset('all')}
-          className="w-full flex items-center justify-center gap-3 py-5 rounded-xl bg-white text-black text-[18px] font-bold hover:bg-gray-100 active:scale-[0.99] transition-all"
+          onClick={selectAllKana}
+          className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#ffffff] to-[#f0f0f0] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(200,200,200,1)] active:shadow-[0_0px_0_rgba(200,200,200,1)] active:translate-y-1 transition-all"
         >
-          <MousePointer2 size={19} className="fill-black" />
+          <MousePointer2 size={16} className="fill-black" />
           Select All Kana
         </button>
 
-        {/* Grid */}
-        <div className="flex gap-5">
-          <GroupCard
-            title="Hiragana ひらがな"
-            selected={subset}
-            onSelect={setSubset}
-            items={[
-              { label: 'Base',   value: 'hiragana-base'   },
-              { label: 'Dakuon', value: 'hiragana-dakuon' },
-              { label: 'Yoon',   value: 'hiragana-yoon'   },
-            ]}
-          />
-          <GroupCard
-            title="Katakana カタカナ"
-            selected={subset}
-            onSelect={setSubset}
-            items={[
-              { label: 'Base',          value: 'katakana-base'    },
-              { label: 'Dakuon',        value: 'katakana-dakuon'  },
-              { label: 'Yoon',          value: 'katakana-yoon'    },
-              { label: 'Foreign sound', value: 'katakana-foreign' },
-            ]}
-          />
-        </div>
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* Hiragana Column */}
+          <div className="bg-[#242424] rounded-xl p-6 border border-[#303030]">
+            <div className="flex items-center gap-2 mb-6 text-[19px] text-[#ddd]">
+              <ChevronUp size={20} />
+              <span>{kanaData.hiragana.title}</span>
+            </div>
+            <div>
+              {kanaData.hiragana.groups.map(group => (
+                <GroupSection 
+                  key={group.id} 
+                  group={group} 
+                  selectedRows={selectedRows} 
+                  toggleRow={toggleRow}
+                  selectAllInGroup={selectAllInGroup}
+                />
+              ))}
+            </div>
+          </div>
 
+          {/* Katakana Column */}
+          <div className="bg-[#242424] rounded-xl p-6 border border-[#303030]">
+            <div className="flex items-center gap-2 mb-6 text-[19px] text-[#ddd]">
+              <ChevronUp size={20} />
+              <span>{kanaData.katakana.title}</span>
+            </div>
+            <div>
+              {kanaData.katakana.groups.map(group => (
+                <GroupSection 
+                  key={group.id} 
+                  group={group} 
+                  selectedRows={selectedRows} 
+                  toggleRow={toggleRow}
+                  selectAllInGroup={selectAllInGroup}
+                />
+              ))}
+            </div>
+          </div>
+
+        </div>
       </div>
+
+      {/* Bottom Fixed Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-[#1f1f1f] border-t border-[#333] p-6 z-40">
+        <div className="max-w-6xl mx-auto flex gap-4">
+          <button className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all">
+            <Zap size={18} className="fill-black" />
+            Blitz
+          </button>
+          <button className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all">
+            <Sword size={18} className="fill-black" />
+            Gauntlet
+          </button>
+          <button 
+            onClick={handleStartClassic}
+            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-white to-[#f0f0f0] text-black text-[18px] font-bold shadow-[0_4px_0_rgba(200,200,200,1)] active:shadow-[0_0px_0_rgba(200,200,200,1)] active:translate-y-1 transition-all"
+          >
+            <Play size={20} className="fill-black" />
+            Classic
+          </button>
+        </div>
+      </div>
+
     </div>
   );
 }
