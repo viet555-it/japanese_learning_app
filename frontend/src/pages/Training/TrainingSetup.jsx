@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, MousePointer2, Keyboard, CircleCheck, Loader2 } from 'lucide-react';
+import { ArrowLeft, Play, MousePointer2, Keyboard, CircleCheck, Loader2, Heart, ShieldAlert, Skull, Zap } from 'lucide-react';
 import { getLessons, getQuizzesByLesson, createTrainingSession } from '../../api/learningApi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -9,12 +9,14 @@ export default function TrainingSetup() {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  const { lessonId, type } = location.state || {};
+  const { lessonId, type, playType = 'classic' } = location.state || {};
   
   const [lesson, setLesson] = useState(null);
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState('pick'); // 'pick' or 'type'
+  const [difficulty, setDifficulty] = useState('normal'); // 'normal', 'hard', 'instant_death'
+  const [blitzTime, setBlitzTime] = useState(10); // in seconds
 
   useEffect(() => {
     if (!lessonId) {
@@ -60,7 +62,10 @@ export default function TrainingSetup() {
           sessionId: session.sessionId,
           mode,
           lessonTitle: lesson?.Title,
-          type
+          type,
+          playType,
+          difficulty: playType === 'gauntlet' ? difficulty : null,
+          blitzTime: playType === 'blitz' ? blitzTime : null
         } 
       });
     } catch (error) {
@@ -76,94 +81,199 @@ export default function TrainingSetup() {
     );
   }
 
+  // Determine Title & Subtitle based on playType
+  let titleText = `${type} Training`;
+  let subtitleText = "Practice in a classic, endless way";
+  let icon = null;
+
+  if (playType === 'gauntlet') {
+    titleText = `${type} Gauntlet`;
+    subtitleText = "Survive as long as you can";
+    icon = <ShieldAlert size={36} className="mx-auto mb-3" />;
+  } else if (playType === 'blitz') {
+    titleText = `${type} Blitz`;
+    subtitleText = "Practice in a fast-paced, time-limited way";
+    icon = <Zap size={36} className="mx-auto mb-3 text-white" />;
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-[#111] text-white font-sans">
       <div className="max-w-2xl mx-auto px-6 py-12">
         
         {/* Header */}
         <div className="text-center mb-12">
+          {icon}
           <h1 className="text-4xl font-black mb-2 tracking-tight">
-            {type} Training
+            {titleText}
           </h1>
-          <p className="text-gray-400 text-lg">Practice in a classic, endless way</p>
+          <p className="text-gray-400 text-lg">
+            {subtitleText}
+          </p>
         </div>
 
         {/* Info Card */}
-        <div className="bg-[#141414] rounded-2xl border border-white/5 p-8 mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-              <CircleCheck size={18} className="text-white" />
-            </div>
-            <span className="text-xl font-bold text-white">Selected Lesson:</span>
-          </div>
-          <div className="pl-11">
-             <div className="text-2xl font-bold text-[#6a9fc0]">{lesson?.Title}</div>
-             <div className="text-gray-500 mt-1">{type} • Level {lesson?.JLPT_Level || 'Basic'}</div>
-          </div>
+        <div className="bg-[#2a2a2a] rounded-xl p-5 mb-4">
+          <div className="text-[#a0a0a0] text-[15px] mb-1">Selected:</div>
+          <div className="text-white text-[17px] font-medium">{type} • Level {lesson?.JLPT_Level || 'Basic'} - {lesson?.Title}</div>
         </div>
 
         {/* Mode Selection */}
-        <div className="space-y-4 mb-12">
+        <div className="space-y-3 mb-4">
            <button 
              onClick={() => setMode('pick')}
-             className={`w-full p-6 rounded-2xl border transition-all flex items-center gap-6 group ${
-               mode === 'pick' ? 'bg-white border-white scale-[1.02]' : 'bg-[#141414] border-white/5 hover:border-white/20'
+             className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+               mode === 'pick' ? 'bg-[#2a2a2a] border-white' : 'bg-[#2a2a2a] border-transparent hover:border-white/20'
              }`}
            >
-             <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-colors ${
-               mode === 'pick' ? 'bg-black text-white' : 'bg-white/5 text-gray-400'
-             }`}>
-               <MousePointer2 size={24} />
+             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-black">
+               <MousePointer2 size={24} className="fill-black" />
              </div>
              <div className="text-left flex-1">
-               <div className={`text-xl font-bold ${mode === 'pick' ? 'text-black' : 'text-white'}`}>Pick</div>
-               <div className={mode === 'pick' ? 'text-black/60' : 'text-gray-500'}>Pick the correct answer from multiple options</div>
+               <div className="text-[17px] font-medium text-white mb-0.5">Pick</div>
+               <div className="text-[#999] text-[13px]">Pick the correct answer from multiple options</div>
              </div>
              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-               mode === 'pick' ? 'border-black' : 'border-white/20'
+               mode === 'pick' ? 'border-white bg-[#555]' : 'border-[#555]'
              }`}>
-               {mode === 'pick' && <div className="w-3 h-3 rounded-full bg-black" />}
+               {mode === 'pick' && <CircleCheck size={24} className="text-white fill-[#555]" />}
              </div>
            </button>
 
            <button 
              onClick={() => setMode('type')}
-             className={`w-full p-6 rounded-2xl border transition-all flex items-center gap-6 group ${
-               mode === 'type' ? 'bg-white border-white scale-[1.02]' : 'bg-[#141414] border-white/5 hover:border-white/20'
+             className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+               mode === 'type' ? 'bg-[#2a2a2a] border-white' : 'bg-[#2a2a2a] border-transparent hover:border-white/20'
              }`}
            >
-             <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-colors ${
-               mode === 'type' ? 'bg-black text-white' : 'bg-white/5 text-gray-400'
-             }`}>
+             <div className="w-12 h-12 bg-[#444] rounded-lg flex items-center justify-center text-[#ccc]">
                <Keyboard size={24} />
              </div>
              <div className="text-left flex-1">
-               <div className={`text-xl font-bold ${mode === 'type' ? 'text-black' : 'text-white'}`}>Type</div>
-               <div className={mode === 'type' ? 'text-black/60' : 'text-gray-500'}>Type the correct answer</div>
+               <div className="text-[17px] font-medium text-white mb-0.5">Type</div>
+               <div className="text-[#999] text-[13px]">Type the correct answer</div>
              </div>
              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-               mode === 'type' ? 'border-black' : 'border-white/20'
+               mode === 'type' ? 'border-white bg-[#555]' : 'border-[#555]'
              }`}>
-               {mode === 'type' && <div className="w-3 h-3 rounded-full bg-black" />}
+               {mode === 'type' && <CircleCheck size={24} className="text-white fill-[#555]" />}
              </div>
            </button>
         </div>
 
-        {/* Buttons */}
-        <div className="flex gap-4">
+        {/* Blitz Duration Selector */}
+        {playType === 'blitz' && (
+          <div className="bg-[#2a2a2a] rounded-xl p-6 mb-12 shadow-sm">
+            <h3 className="text-[15px] font-medium text-white mb-6">Duration (per question):</h3>
+            <div className="flex items-center gap-3 justify-center md:justify-start">
+               {[
+                 { label: '5s', val: 5 },
+                 { label: '10s', val: 10 },
+                 { label: '15s', val: 15 },
+                 { label: '30s', val: 30 },
+                 { label: '60s', val: 60 }
+               ].map(t => {
+                 const isActive = blitzTime === t.val;
+                 return (
+                   <button
+                     key={t.val}
+                     onClick={() => setBlitzTime(t.val)}
+                     className={`w-[52px] h-[52px] rounded-full font-bold text-[15px] transition-all flex items-center justify-center ${
+                       isActive 
+                       ? 'bg-[#ECEBDB] text-black shadow-[0_4px_0_#b5b5a0] translate-y-[-2px]' 
+                       : 'bg-[#404040] text-gray-400 shadow-[0_4px_0_#222] hover:bg-[#505050] hover:text-white'
+                     }`}
+                     style={isActive ? { transform: 'translateY(2px)', boxShadow: '0 2px 0 #b5b5a0' } : {}}
+                   >
+                     {t.label}
+                   </button>
+                 );
+               })}
+            </div>
+          </div>
+        )}
+
+        {/* Difficulty Selection for Gauntlet */}
+        {playType === 'gauntlet' && (
+          <div className="bg-[#2a2a2a] rounded-xl p-4 space-y-3 mb-12">
+            <h3 className="text-[15px] font-medium text-white mb-2 ml-2">Select Difficulty:</h3>
+            
+            <button 
+              onClick={() => setDifficulty('normal')}
+              className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+                difficulty === 'normal' ? 'bg-[#333] border-white' : 'bg-transparent border-transparent hover:bg-white/5'
+              }`}
+            >
+              <div className="w-12 h-12 bg-black/50 rounded-lg flex items-center justify-center">
+                <Heart size={24} className="fill-red-500 text-red-500" />
+              </div>
+              <div className="text-left flex-1">
+                <div className="text-[17px] font-medium text-white mb-0.5">Normal</div>
+                <div className="text-[#999] text-[13px]">3 Hearts. +1 per correct, -1 per mistake.</div>
+              </div>
+              <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                difficulty === 'normal' ? 'border-white bg-white' : 'border-[#666]'
+              }`}>
+                {difficulty === 'normal' && <div className="w-2.5 h-2.5 rounded-full bg-black" />}
+              </div>
+            </button>
+
+            <button 
+              onClick={() => setDifficulty('hard')}
+              className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+                difficulty === 'hard' ? 'bg-[#333] border-white' : 'bg-transparent border-transparent hover:bg-white/5'
+              }`}
+            >
+              <div className="w-12 h-12 bg-black/50 rounded-lg flex items-center justify-center">
+                <ShieldAlert size={24} className="text-orange-500" />
+              </div>
+              <div className="text-left flex-1">
+                <div className="text-[17px] font-medium text-white mb-0.5">Hard</div>
+                <div className="text-[#999] text-[13px]">3 Hearts. -1 per mistake. No healing.</div>
+              </div>
+              <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                difficulty === 'hard' ? 'border-white bg-white' : 'border-[#666]'
+              }`}>
+                {difficulty === 'hard' && <div className="w-2.5 h-2.5 rounded-full bg-black" />}
+              </div>
+            </button>
+
+            <button 
+              onClick={() => setDifficulty('instant_death')}
+              className={`w-full p-4 rounded-xl border transition-all flex items-center gap-4 group ${
+                difficulty === 'instant_death' ? 'bg-red-500/20 border-red-500' : 'bg-transparent border-transparent hover:bg-red-500/10'
+              }`}
+            >
+              <div className="w-12 h-12 bg-black/50 rounded-lg flex items-center justify-center">
+                 <Skull size={24} className="text-red-500" />
+              </div>
+              <div className="text-left flex-1">
+                <div className="text-[17px] font-medium text-red-400 mb-0.5">Instant Death</div>
+                <div className="text-red-400/80 text-[13px]">0 Mistakes allowed. 1 strike and you're out.</div>
+              </div>
+              <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                difficulty === 'instant_death' ? 'border-red-500 bg-red-500' : 'border-red-500/30'
+              }`}>
+                {difficulty === 'instant_death' && <div className="w-2.5 h-2.5 rounded-full bg-black" />}
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* Buttons - Matched EXACTLY to image aesthetics */}
+        <div className="flex gap-4 mb-16 justify-center mt-12">
            <button 
              onClick={() => navigate(-1)}
-             className="flex-1 py-5 rounded-2xl bg-[#2a2a2a] text-white font-bold text-lg hover:bg-[#333] transition-all flex items-center justify-center gap-2"
+             className="w-[180px] h-[56px] rounded-[18px] bg-[#d3cfc1] text-[#4d4b45] font-bold text-[17px] flex items-center justify-center gap-2 shadow-[0_6px_0_#9d998d] active:shadow-[0_2px_0_#9d998d] active:translate-y-1 transition-all"
            >
-             <ArrowLeft size={20} />
+             <ArrowLeft size={18} />
              Back
            </button>
            <button 
              onClick={handleStart}
-             className="flex-[2] py-5 rounded-2xl bg-white text-black font-black text-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
+             className="w-[280px] h-[56px] rounded-[18px] bg-white text-black font-bold text-[17px] flex items-center justify-center gap-2 shadow-[0_6px_0_#d1d1d1] active:shadow-[0_2px_0_#d1d1d1] active:translate-y-1 transition-all"
            >
-             <Play size={20} fill="black" />
-             Start Training
+             <Play size={18} fill="black" />
+             Start {playType === 'gauntlet' ? 'Gauntlet' : playType === 'blitz' ? 'Blitz' : 'Training'}
            </button>
         </div>
 

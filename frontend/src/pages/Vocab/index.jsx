@@ -89,9 +89,9 @@ export default function VocabularyPage() {
     fetchData();
   }, [activeUnitId]);
 
-  const handleStart = () => {
+  const handleStart = (playType) => {
     if (selectedLessonId) {
-      navigate('/training/setup', { state: { lessonId: selectedLessonId, type: 'Vocabulary' } });
+      navigate('/training/setup', { state: { lessonId: selectedLessonId, type: 'Vocabulary', playType } });
     } else {
       alert("Please select a valid level first.");
     }
@@ -197,16 +197,22 @@ export default function VocabularyPage() {
       {/* Bottom Fixed Action Bar */}
       <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-[#1f1f1f] border-t border-[#333] p-6 z-40">
         <div className="max-w-7xl mx-auto flex gap-4">
-          <button className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all">
+          <button 
+            onClick={() => handleStart('blitz')}
+            className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all"
+          >
             <Zap size={18} className="fill-black" />
             Blitz
           </button>
-          <button className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all">
+          <button 
+            onClick={() => handleStart('gauntlet')}
+            className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all"
+          >
             <Sword size={18} className="fill-black" />
             Gauntlet
           </button>
           <button 
-            onClick={handleStart}
+            onClick={() => handleStart('classic')}
             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-white to-[#f0f0f0] text-black text-[18px] font-bold shadow-[0_4px_0_rgba(200,200,200,1)] active:shadow-[0_0px_0_rgba(200,200,200,1)] active:translate-y-1 transition-all"
           >
             <Play size={20} className="fill-black" />
