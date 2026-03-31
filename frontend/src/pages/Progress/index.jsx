@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import { TrendingUp, Flame, Trophy, BarChart2 } from 'lucide-react';
+import { TrendingUp, Flame, Trophy } from 'lucide-react';
 import StreakTab from './Streak';
 import AchievementsTab from './Achievements';
+import StatsTab from './Stats';
 
 const tabs = [
   { key: 'stats',        label: 'Stats',        icon: <TrendingUp size={18} /> },
   { key: 'streak',       label: 'Streak',       icon: <Flame size={18} />      },
   { key: 'achievements', label: 'Achievements', icon: <Trophy size={18} />     },
 ];
-
-const EmptyState = () => (
-  <div className="flex flex-col items-center justify-center py-32 text-center">
-    <BarChart2 size={90} className="text-[#333] mb-8" strokeWidth={1.5} />
-    <h2 className="text-[28px] font-bold text-[#555] mb-4">No Progress Yet</h2>
-    <p className="text-[#444] text-[17px] leading-8 max-w-md">
-      Start practicing to see your statistics here. Complete training sessions to track your progress and character mastery.
-    </p>
-  </div>
-);
 
 export default function ProgressPage() {
   const [activeTab, setActiveTab] = useState('stats');
@@ -59,7 +50,7 @@ export default function ProgressPage() {
           </div>
         )}
 
-        {activeTab === 'stats'        && <EmptyState />}
+        {activeTab === 'stats'        && <StatsTab />}
         {activeTab === 'streak'       && <StreakTab />}
         {activeTab === 'achievements' && <AchievementsTab />}
 
