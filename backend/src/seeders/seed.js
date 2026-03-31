@@ -68,21 +68,21 @@ async function migrateData() {
 
                     // 1.1 Create Lesson
                     const [resLesson] = await connection.execute(
-                        "INSERT INTO `Lesson` (JLPT_Level, Title, Type) VALUES (?, ?, ?)",
+                        "INSERT INTO `lesson` (JLPT_Level, Title, Type) VALUES (?, ?, ?)",
                         [jlptCode, `Vocabulary ${jlptCode} - Lesson ${i + 1}`, 'Vocabulary']
                     );
                     const lessonId = resLesson.insertId;
 
                     // 1.2 Create Quiz
                     const [resQuiz] = await connection.execute(
-                        "INSERT INTO `Quiz` (QuizTitle, Difficulty) VALUES (?, ?)",
+                        "INSERT INTO `quiz` (QuizTitle, Difficulty) VALUES (?, ?)",
                         [`Quiz Vocabulary ${jlptCode} - Lesson ${i + 1}`, difficulty]
                     );
                     const quizId = resQuiz.insertId;
 
                     for (const item of chunks[i]) {
                         const [resVocab] = await connection.execute(
-                            "INSERT INTO `Vocabulary` (LessonID, Word, Furigana, Meaning) VALUES (?, ?, ?, ?)",
+                            "INSERT INTO `vocabulary` (LessonID, Word, Furigana, Meaning) VALUES (?, ?, ?, ?)",
                             [
                                 lessonId,
                                 item.kanji || item.kana,
@@ -93,7 +93,7 @@ async function migrateData() {
                         const vocabId = resVocab.insertId;
 
                         await connection.execute(
-                            "INSERT INTO `Quiz_Items` (QuizID, VocabID) VALUES (?, ?)",
+                            "INSERT INTO `quiz_items` (QuizID, VocabID) VALUES (?, ?)",
                             [quizId, vocabId]
                         );
                     }
@@ -119,14 +119,14 @@ async function migrateData() {
 
                     // 2.1 Create Lesson
                     const [resLesson] = await connection.execute(
-                        "INSERT INTO `Lesson` (JLPT_Level, Title, Type) VALUES (?, ?, ?)",
+                        "INSERT INTO `lesson` (JLPT_Level, Title, Type) VALUES (?, ?, ?)",
                         [jlptCode, `Kanji ${jlptCode} - Lesson ${i + 1}`, 'Kanji']
                     );
                     const lessonId = resLesson.insertId;
 
                     // 2.2 Create Quiz
                     const [resQuiz] = await connection.execute(
-                        "INSERT INTO `Quiz` (QuizTitle, Difficulty) VALUES (?, ?)",
+                        "INSERT INTO `quiz` (QuizTitle, Difficulty) VALUES (?, ?)",
                         [`Quiz Kanji ${jlptCode} - Lesson ${i + 1}`, difficulty]
                     );
                     const quizId = resQuiz.insertId;
@@ -167,14 +167,14 @@ async function migrateData() {
                     const jlptCode = 'N5'; 
                     // 3.1 Create Lesson
                     const [resLesson] = await connection.execute(
-                        "INSERT INTO `Lesson` (JLPT_Level, Title, Type) VALUES (?, ?, ?)",
+                        "INSERT INTO `lesson` (JLPT_Level, Title, Type) VALUES (?, ?, ?)",
                         [jlptCode, `${type.charAt(0).toUpperCase() + type.slice(1)} - Bài ${i + 1}`, 'Kana']
                     );
                     const lessonId = resLesson.insertId;
 
                     // 3.2 Create Quiz
                     const [resQuiz] = await connection.execute(
-                        "INSERT INTO `Quiz` (QuizTitle, Difficulty) VALUES (?, ?)",
+                        "INSERT INTO `quiz` (QuizTitle, Difficulty) VALUES (?, ?)",
                         [`Quiz ${type.charAt(0).toUpperCase() + type.slice(1)} - Bài ${i + 1}`, 'Normal']
                     );
                     const quizId = resQuiz.insertId;

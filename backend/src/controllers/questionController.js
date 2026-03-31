@@ -14,7 +14,7 @@ export const getQuestions = async (req, res) => {
 
         // Get sample item to determine type
         const [items] = await db.query(
-            `SELECT qi.* FROM Quiz_Items qi WHERE qi.QuizID = ? LIMIT 1`,
+            `SELECT qi.* FROM quiz_items qi WHERE qi.QuizID = ? LIMIT 1`,
             [quizId]
         );
 
@@ -29,30 +29,30 @@ export const getQuestions = async (req, res) => {
             type = 'Vocabulary';
             query = `
                 SELECT qi.ItemID, v.VocabID, v.Word, v.Furigana, v.Meaning
-                FROM Quiz_Items qi
-                JOIN Vocabulary v ON qi.VocabID = v.VocabID
+                FROM quiz_items qi
+                JOIN vocabulary v ON qi.VocabID = v.VocabID
                 WHERE qi.QuizID = ?
                 ORDER BY RAND()`;
         } else if (items[0].KanjiID) {
             type = 'Kanji';
             query = `
                 SELECT qi.ItemID, k.KanjiID, k.Character, k.Onyomi, k.Kunyomi, k.Meaning
-                FROM Quiz_Items qi
-                JOIN Kanji k ON qi.KanjiID = k.KanjiID
+                FROM quiz_items qi
+                JOIN kanji k ON qi.KanjiID = k.KanjiID
                 WHERE qi.QuizID = ?
                 ORDER BY RAND()`;
         } else if (items[0].KanaID) {
             type = 'Kana';
             query = `
                 SELECT qi.ItemID, kn.KanaID, kn.Character, kn.Romaji
-                FROM Quiz_Items qi
-                JOIN Kana kn ON qi.KanaID = kn.KanaID
+                FROM quiz_items qi
+                JOIN kana kn ON qi.KanaID = kn.KanaID
                 WHERE qi.QuizID = ?
                 ORDER BY RAND()`;
         }
 
         const [questions] = await db.query(query, [quizId]);
-        const [quizHeader] = await db.query(`SELECT * FROM Quiz WHERE QuizID = ?`, [quizId]);
+        const [quizHeader] = await db.query(`SELECT * FROM quiz WHERE QuizID = ?`, [quizId]);
 
         res.json({
             quizTitle: quizHeader[0]?.QuizTitle,
@@ -74,18 +74,18 @@ export const getQuizzes = async (req, res) => {
     try {
         const { lessonId } = req.query;
 
-        let query = `SELECT DISTINCT q.* FROM Quiz q`;
+        let query = `SELECT DISTINCT q.* FROM quiz q`;
         let params = [];
 
         if (lessonId) {
             // Join Quiz items back to the Lesson table
             query = `
                 SELECT DISTINCT q.* 
-                FROM Quiz q 
-                JOIN Quiz_Items qi ON q.QuizID = qi.QuizID
-                LEFT JOIN Vocabulary v ON qi.VocabID = v.VocabID
-                LEFT JOIN Kanji k ON qi.KanjiID = k.KanjiID
-                LEFT JOIN Kana kn ON qi.KanaID = kn.KanaID
+                FROM quiz q 
+                JOIN quiz_items qi ON q.QuizID = qi.QuizID
+                LEFT JOIN vocabulary v ON qi.VocabID = v.VocabID
+                LEFT JOIN kanji k ON qi.KanjiID = k.KanjiID
+                LEFT JOIN kana kn ON qi.KanaID = kn.KanaID
                 WHERE v.LessonID = ? OR k.LessonID = ? OR kn.LessonID = ?`;
             params = [lessonId, lessonId, lessonId];
         }
@@ -108,7 +108,7 @@ export const createQuiz = async (req, res) => {
             return res.status(400).json({ message: "quizTitle and difficulty are required" });
         }
         const [result] = await db.query(
-            "INSERT INTO Quiz (QuizTitle, Difficulty) VALUES (?, ?)",
+            "INSERT INTO quiz (QuizTitle, Difficulty) VALUES (?, ?)",
             [quizTitle, difficulty]
         );
         res.status(201).json({ message: "Quiz created", quizId: result.insertId });
@@ -143,7 +143,7 @@ export const updateQuiz = async (req, res) => {
         
         params.push(id);
         const [result] = await db.query(
-            `UPDATE Quiz SET ${updateFields.join(", ")} WHERE QuizID = ?`,
+            `UPDATE quiz SET ${updateFields.join(", ")} WHERE QuizID = ?`,
             params
         );
         
@@ -166,9 +166,9 @@ export const deleteQuiz = async (req, res) => {
         const { id } = req.params;
         
         // Explicitly clear quiz items first to avoid relation issues if fk is not cascading
-        await db.query("DELETE FROM Quiz_Items WHERE QuizID = ?", [id]);
+        await db.query("DELETE FROM quiz_items WHERE QuizID = ?", [id]);
         
-        const [result] = await db.query("DELETE FROM Quiz WHERE QuizID = ?", [id]);
+        const [result] = await db.query("DELETE FROM quiz WHERE QuizID = ?", [id]);
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: "Quiz not found" });
         }
@@ -198,17 +198,17 @@ export const addQuizItems = async (req, res) => {
             
             if (vocabIds && Array.isArray(vocabIds)) {
                 for (const id of vocabIds) {
-                    await connection.query("INSERT INTO Quiz_Items (QuizID, VocabID) VALUES (?, ?)", [quizId, id]);
+                    await connection.query("INSERT INTO quiz_items (QuizID, VocabID) VALUES (?, ?)", [quizId, id]);
                 }
             }
             if (kanjiIds && Array.isArray(kanjiIds)) {
                 for (const id of kanjiIds) {
-                    await connection.query("INSERT INTO Quiz_Items (QuizID, KanjiID) VALUES (?, ?)", [quizId, id]);
+                    await connection.query("INSERT INTO quiz_items (QuizID, KanjiID) VALUES (?, ?)", [quizId, id]);
                 }
             }
             if (kanaIds && Array.isArray(kanaIds)) {
                 for (const id of kanaIds) {
-                    await connection.query("INSERT INTO Quiz_Items (QuizID, KanaID) VALUES (?, ?)", [quizId, id]);
+                    await connection.query("INSERT INTO quiz_items (QuizID, KanaID) VALUES (?, ?)", [quizId, id]);
                 }
             }
             

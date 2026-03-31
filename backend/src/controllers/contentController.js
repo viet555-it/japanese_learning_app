@@ -9,7 +9,7 @@ export const getLessons = async (req, res) => {
         
         console.log(`GET /lessons - Filters: level=${level}, type=${type}`);
 
-        let query = 'SELECT * FROM Lesson';
+        let query = 'SELECT * FROM lesson';
         const params = [];
         const conditions = [];
 
@@ -39,7 +39,7 @@ export const getLessons = async (req, res) => {
 export const getLessonById = async (req, res) => {
     try {
         const { id } = req.params;
-        const [lesson] = await db.query('SELECT * FROM Lesson WHERE LessonID = ?', [id]);
+        const [lesson] = await db.query('SELECT * FROM lesson WHERE LessonID = ?', [id]);
         if (lesson.length === 0) {
             return res.status(404).json({ message: 'Lesson not found' });
         }
@@ -56,7 +56,7 @@ export const getVocab = async (req, res) => {
         const lessonId = req.query.lessonId || req.query.lessonID || req.query.lesson_id || req.query.LessonID;
         console.log(`GET /vocab - Filter: lessonId=${lessonId}`);
 
-        let query = 'SELECT * FROM Vocabulary';
+        let query = 'SELECT * FROM vocabulary';
         const params = [];
         
         if (lessonId) {
@@ -69,7 +69,7 @@ export const getVocab = async (req, res) => {
 
         // Extra help: if empty but lessonId was provided, check if lesson exists/type mismatch
         if (lessonId && vocab.length === 0) {
-            const [lesson] = await db.query('SELECT Type FROM Lesson WHERE LessonID = ?', [lessonId]);
+            const [lesson] = await db.query('SELECT Type FROM lesson WHERE LessonID = ?', [lessonId]);
             if (lesson.length > 0 && lesson[0].Type !== 'Vocabulary') {
                 return res.json({
                     message: `Lesson ${lessonId} exists but its type is '${lesson[0].Type}', not 'Vocabulary'.`,
@@ -91,7 +91,7 @@ export const getKanji = async (req, res) => {
         const lessonId = req.query.lessonId || req.query.lessonID || req.query.lesson_id || req.query.LessonID;
         console.log(`GET /kanji - Filter: lessonId=${lessonId}`);
 
-        let query = 'SELECT * FROM Kanji';
+        let query = 'SELECT * FROM kanji';
         const params = [];
         
         if (lessonId) {
@@ -104,7 +104,7 @@ export const getKanji = async (req, res) => {
 
         // Extra help: if empty but lessonId was provided
         if (lessonId && kanji.length === 0) {
-            const [lesson] = await db.query('SELECT Type FROM Lesson WHERE LessonID = ?', [lessonId]);
+            const [lesson] = await db.query('SELECT Type FROM lesson WHERE LessonID = ?', [lessonId]);
             if (lesson.length > 0 && lesson[0].Type !== 'Kanji') {
                 return res.json({
                     message: `Lesson ${lessonId} exists but its type is '${lesson[0].Type}', not 'Kanji'.`,
@@ -126,7 +126,7 @@ export const getKana = async (req, res) => {
         const lessonId = req.query.lessonId || req.query.lessonID || req.query.lesson_id || req.query.LessonID;
         console.log(`GET /kana - Filter: lessonId=${lessonId}`);
 
-        let query = 'SELECT * FROM Kana';
+        let query = 'SELECT * FROM kana';
         const params = [];
         
         if (lessonId) {
@@ -139,7 +139,7 @@ export const getKana = async (req, res) => {
 
         // Extra help: if empty but lessonId was provided
         if (lessonId && kana.length === 0) {
-            const [lesson] = await db.query('SELECT Type FROM Lesson WHERE LessonID = ?', [lessonId]);
+            const [lesson] = await db.query('SELECT Type FROM lesson WHERE LessonID = ?', [lessonId]);
             if (lesson.length > 0 && lesson[0].Type !== 'Kana') {
                 return res.json({
                     message: `Lesson ${lessonId} exists but its type is '${lesson[0].Type}', not 'Kana'.`,
