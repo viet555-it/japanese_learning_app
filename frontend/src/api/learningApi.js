@@ -125,6 +125,14 @@ export const getUserHistory = async (userId) => {
 };
 
 /**
+ * GET /api/progress/login-history/:userId
+ */
+export const getUserLoginHistory = async (userId) => {
+  const response = await axiosInstance.get(`/progress/login-history/${userId}`);
+  return response.data;
+};
+
+/**
  * GET /api/progress/achievements
  */
 export const getAllAchievements = async () => {

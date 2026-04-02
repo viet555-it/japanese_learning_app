@@ -71,6 +71,26 @@ export const getUserHistory = async (req, res) => {
 };
 
 /**
+ * Get user login tracking history for the calendar streak
+ */
+export const getUserLoginHistory = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const query = `
+            SELECT LoginDate as StartTime
+            FROM user_login_history
+            WHERE UserID = ?
+            ORDER BY LoginDate DESC
+        `;
+        const [history] = await db.query(query, [userId]);
+        res.json(history);
+    } catch (error) {
+        console.error("Error fetching user login history:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+/**
  * List all available system achievements
  */
 export const getAllAchievements = async (req, res) => {

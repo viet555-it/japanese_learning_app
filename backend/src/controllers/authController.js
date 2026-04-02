@@ -74,6 +74,9 @@ export const login = async (req, res) => {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
+        // Tracker cho calendar streak: ghi nhận lượt đăng nhập hôm nay
+        await db.query('INSERT IGNORE INTO user_login_history (UserID, LoginDate) VALUES (?, CURDATE())', [user.UserID]);
+
         // Save refresh token to DB. Expiry logic: current time + 7 days
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 7);
@@ -152,6 +155,9 @@ export const getProfile = async (req, res) => {
     try {
         // Authenticated user ID is attached by authMiddleware
         const userId = req.user.id;
+
+        // Tracker cho calendar streak: nếu user fetch profile (mở app) -> ghi nhận visit
+        await db.query('INSERT IGNORE INTO user_login_history (UserID, LoginDate) VALUES (?, CURDATE())', [userId]);
         
         const [users] = await db.query(
             'SELECT UserID, Username, Email, CurrentStreak, LongestStreak, LastActivityDate, CreatedAt FROM user WHERE UserID = ?', 
@@ -219,6 +225,8 @@ export const googleLogin = async (req, res) => {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
+        await db.query('INSERT IGNORE INTO user_login_history (UserID, LoginDate) VALUES (?, CURDATE())', [user.UserID]);
+
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 7);
         await db.query(
@@ -267,6 +275,8 @@ export const facebookLogin = async (req, res) => {
 
         const newAccessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
+
+        await db.query('INSERT IGNORE INTO user_login_history (UserID, LoginDate) VALUES (?, CURDATE())', [user.UserID]);
 
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 7);

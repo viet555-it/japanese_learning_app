@@ -9,7 +9,8 @@ export default function TrainingSetup() {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  const { lessonId, type, playType = 'classic' } = location.state || {};
+  const { lessonId, lessonIds, type, playType = 'classic' } = location.state || {};
+  const activeLessonIds = lessonIds || (lessonId ? [lessonId] : []);
   
   const [lesson, setLesson] = useState(null);
   const [quizzes, setQuizzes] = useState([]);
@@ -19,7 +20,7 @@ export default function TrainingSetup() {
   const [blitzTime, setBlitzTime] = useState(10); // in seconds
 
   useEffect(() => {
-    if (!lessonId) {
+    if (activeLessonIds.length === 0) {
       navigate('/');
       return;
     }
@@ -29,12 +30,23 @@ export default function TrainingSetup() {
         setLoading(true);
         // Fetch lessons to get title
         const lessons = await getLessons({ type });
-        const currentLesson = lessons.find(l => l.LessonID === lessonId);
-        setLesson(currentLesson);
+        if (activeLessonIds.length === 1) {
+          const currentLesson = lessons.find(l => l.LessonID === activeLessonIds[0]);
+          setLesson(currentLesson);
+        } else {
+          const firstLesson = lessons.find(l => l.LessonID === activeLessonIds[0]);
+          setLesson({ ...firstLesson, Title: "Multiple Lessons Mode" });
+        }
 
-        // Fetch available quizzes for this lesson
-        const quizData = await getQuizzesByLesson(lessonId);
-        setQuizzes(quizData);
+        // Fetch available quizzes for these lessons
+        let allQuizzes = [];
+        for (const lId of activeLessonIds) {
+          const quizData = await getQuizzesByLesson(lId);
+          if (quizData) {
+            allQuizzes = [...allQuizzes, ...quizData];
+          }
+        }
+        setQuizzes(allQuizzes);
       } catch (error) {
         console.error("Error loading setup data:", error);
       } finally {
@@ -43,7 +55,7 @@ export default function TrainingSetup() {
     };
 
     fetchData();
-  }, [lessonId, type]);
+  }, [lessonIds, lessonId, type]);
 
   const handleStart = async () => {
     if (quizzes.length === 0) {
@@ -53,12 +65,12 @@ export default function TrainingSetup() {
 
     try {
       // Create session in backend
-      const session = await createTrainingSession(user?.UserID || null, lessonId);
+      const session = await createTrainingSession(user?.UserID || null, activeLessonIds[0]);
       
       // Navigate to Play page
       navigate('/training/play', { 
         state: { 
-          quizId: quizzes[0].QuizID, 
+          quizIds: quizzes.map(q => q.QuizID), 
           sessionId: session.sessionId,
           mode,
           lessonTitle: lesson?.Title,

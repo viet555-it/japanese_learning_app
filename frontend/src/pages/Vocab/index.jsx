@@ -12,7 +12,10 @@ const units = [
 ];
 
 const WordCard = ({ word, romaji, meaning }) => (
-  <div className="p-5 border-b border-[#303030] last:border-b-0 space-y-3 hover:bg-white/[0.02] transition-colors cursor-pointer">
+  <div 
+    onClick={() => window.open(`https://jisho.org/search/${word}`, '_blank')}
+    className="p-5 border-b border-[#303030] last:border-b-0 space-y-3 hover:bg-white/[0.02] transition-colors cursor-pointer"
+  >
     <div className="text-[38px] font-sans text-white leading-tight mb-1">{word}</div>
     <div className="inline-block bg-[#1a1a1a] rounded px-2 py-1 border border-[#333]">
       <span className="text-[14px] text-[#ddd] leading-none block">{romaji}</span>
@@ -60,7 +63,7 @@ export default function VocabularyPage() {
   const [lessons, setLessons] = useState([]);
   const [vocabByLesson, setVocabByLesson] = useState({});
   const [loading, setLoading] = useState(false);
-  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const [selectedLessonIds, setSelectedLessonIds] = useState([]);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -79,7 +82,11 @@ export default function VocabularyPage() {
           vocabMap[lesson.LessonID] = vData || [];
         }
         setVocabByLesson(vocabMap);
-        if (lessonData.length > 0) setSelectedLessonId(lessonData[0].LessonID);
+        if (lessonData.length > 0) {
+          // Keep empty by default so user can select, or auto-pick first
+          // We will clear selection when switching units
+          setSelectedLessonIds([]);
+        }
       } catch (error) {
         console.error("Error loading Vocab data:", error);
       } finally {
@@ -90,11 +97,26 @@ export default function VocabularyPage() {
   }, [activeUnitId]);
 
   const handleStart = (playType) => {
-    if (selectedLessonId) {
-      navigate('/training/setup', { state: { lessonId: selectedLessonId, type: 'Vocabulary', playType } });
+    if (selectedLessonIds.length > 0) {
+      navigate('/training/setup', { state: { lessonIds: selectedLessonIds, type: 'Vocabulary', playType } });
     } else {
-      alert("Please select a valid level first.");
+      alert("Please select at least 1 level first.");
     }
+  };
+
+  const handleQuickSelect = () => {
+    if (lessons && lessons.length > 0) {
+      const allIds = lessons.map(l => l.LessonID);
+      if (selectedLessonIds.length === allIds.length) {
+        setSelectedLessonIds([]);
+      } else {
+        setSelectedLessonIds(allIds);
+      }
+    }
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedLessonIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
   return (
@@ -117,7 +139,7 @@ export default function VocabularyPage() {
             <div className="text-[#a0a0a0] text-[15px] leading-relaxed mt-4 pl-8 space-y-1">
               <p>This is the place where you can learn and practice the most common words used in day-to-day Japanese.</p>
               <p>To begin, select at least 1 level, select your training mode, then hit Go! below and start training!</p>
-              <p className="mt-2 text-[#ccc]">New: click on a word to find out more about it on <span className="underline cursor-pointer hover:text-white">Jisho</span>!</p>
+              <p className="mt-2 text-[#ccc]">New: click on a word to find out more about it on <a href="https://jisho.org/" target="_blank" rel="noopener noreferrer" className="underline cursor-pointer hover:text-white">Jisho</a>!</p>
             </div>
           )}
         </div>
@@ -155,6 +177,7 @@ export default function VocabularyPage() {
 
         {/* Quick Select Button */}
         <button
+          onClick={handleQuickSelect}
           className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all"
         >
           <MousePointer2 size={16} className="fill-black" />
@@ -182,8 +205,8 @@ export default function VocabularyPage() {
                      key={lesson.LessonID}
                      title={lesson.Title}
                      lessonId={lesson.LessonID}
-                     isSelected={selectedLessonId === lesson.LessonID}
-                     onSelect={setSelectedLessonId}
+                     isSelected={selectedLessonIds.includes(lesson.LessonID)}
+                     onSelect={toggleSelect}
                      words={vocabByLesson[lesson.LessonID] || []}
                    />
                  ))

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, Trophy, Calendar, CalendarDays, CalendarRange } from 'lucide-react';
-import { getUserHistory } from '../../api/learningApi';
+import { Flame, Trophy, Calendar, CalendarDays, CalendarRange, Check } from 'lucide-react';
+import { getUserLoginHistory } from '../../api/learningApi';
 import { useAuth } from '../../context/AuthContext';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -95,9 +95,11 @@ const WeekView = ({ activeDates }) => {
           return (
             <div key={d} className="flex flex-col items-center gap-3">
               <span className="text-[14px] text-[#555] font-medium">{d}</span>
-              <div className={`w-10 h-10 rounded-lg border ${
-                isActive ? 'bg-white/20 border-white/40' : 'bg-[#1e1e1e] border-white/5'
-              }`} />
+              <div className={`w-10 h-10 rounded-lg border flex items-center justify-center ${
+                isActive ? 'bg-white/20 border-white/40 text-white' : 'bg-[#1e1e1e] border-white/5'
+              }`}>
+                {isActive && <Check size={20} />}
+              </div>
             </div>
           );
         })}
@@ -197,7 +199,7 @@ export default function StreakTab() {
   useEffect(() => {
     const activeUserId = user?.UserID || user?.id;
     if (activeUserId) {
-      getUserHistory(activeUserId)
+      getUserLoginHistory(activeUserId)
         .then(data => setHistory(data || []))
         .catch(console.error);
     }

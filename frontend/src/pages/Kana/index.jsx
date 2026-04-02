@@ -7,20 +7,49 @@ const kanaData = {
   hiragana: {
     title: 'Hiragana ひらがな',
     groups: [
-      { id: 'h_base', name: 'Base', rows: [ 'a • i • u • e • o', 'ka • ki • ku • ke • ko', 'sa • shi • su • se • so', 'ta • chi • tsu • te • to', 'na • ni • nu • ne • no', 'ha • hi • fu • he • ho', 'ma • mi • mu • me • mo', 'ya • yu • yo', 'ra • ri • ru • re • ro', 'wa • wo • n' ] },
-      { id: 'h_dakuon', name: 'Dakuon', rows: [ 'ga • gi • gu • ge • go', 'za • ji • zu • ze • zo', 'da • ji • zu • de • do', 'ba • bi • bu • be • bo', 'pa • pi • pu • pe • po' ] },
-      { id: 'h_yoon', name: 'Yoon', rows: [ 'kya • kyu • kyo', 'gya • gyu • gyo', 'sha • shu • sho', 'ja • ju • jo', 'cha • chu • cho', 'nya • nyu • nyo', 'mya • myu • myo', 'rya • ryu • ryo', 'hya • hyu • hyo', 'bya • byu • byo', 'pya • pyu • pyo' ] }
+      { id: 'h_base', name: 'Base', rows: [ 'a • i • u • e • o', 'ka • ki • ku • ke • ko', 'sa • shi • su • se • so', 'ta • chi • tsu • te • to', 'na • ni • nu • ne • no', 'ha • hi • fu • he • ho', 'ma • mi • mu • me • mo', 'ya • yu • yo', 'ra • ri • ru • re • ro', 'wa • wo • n' ], kanaRows: [ 'あ • い • う • え • お', 'か • き • く • け • こ', 'さ • し • す • せ • そ', 'た • ち • つ • て • と', 'な • に • ぬ • ね • の', 'は • ひ • ふ • へ • ほ', 'ま • み • む • め • も', 'や • ゆ • よ', 'ら • り • る • れ • ろ', 'わ • を • ん' ] },
+      { id: 'h_dakuon', name: 'Dakuon', rows: [ 'ga • gi • gu • ge • go', 'za • ji • zu • ze • zo', 'da • ji • zu • de • do', 'ba • bi • bu • be • bo', 'pa • pi • pu • pe • po' ], kanaRows: [ 'が • ぎ • ぐ • げ • ご', 'ざ • じ • ず • ぜ • ぞ', 'だ • ぢ • づ • で • ど', 'ば • び • ぶ • べ • ぼ', 'ぱ • ぴ • ぷ • ぺ • ぽ' ] },
+      { id: 'h_yoon', name: 'Yoon', rows: [ 'kya • kyu • kyo', 'gya • gyu • gyo', 'sha • shu • sho', 'ja • ju • jo', 'cha • chu • cho', 'nya • nyu • nyo', 'mya • myu • myo', 'rya • ryu • ryo', 'hya • hyu • hyo', 'bya • byu • byo', 'pya • pyu • pyo' ], kanaRows: [ 'きゃ • きゅ • きょ', 'ぎゃ • ぎゅ • ぎょ', 'しゃ • しゅ • しょ', 'じゃ • じゅ • じょ', 'ちゃ • ちゅ • ちょ', 'にゃ • にゅ • にょ', 'みゃ • みゅ • みょ', 'りゃ • りゅ • りょ', 'ひゃ • ひゅ • ひょ', 'びゃ • びゅ • びょ', 'ぴゃ • ぴゅ • ぴょ' ] }
     ]
   },
   katakana: {
     title: 'Katakana カタカナ',
     groups: [
-      { id: 'k_base', name: 'Base', rows: [ 'a • i • u • e • o', 'ka • ki • ku • ke • ko', 'sa • shi • su • se • so', 'ta • chi • tsu • te • to', 'na • ni • nu • ne • no', 'ha • hi • fu • he • ho', 'ma • mi • mu • me • mo', 'ya • yu • yo', 'ra • ri • ru • re • ro', 'wa • wo • n' ] },
-      { id: 'k_dakuon', name: 'Dakuon', rows: [ 'ga • gi • gu • ge • go', 'za • ji • zu • ze • zo', 'da • ji • zu • de • do', 'ba • bi • bu • be • bo', 'pa • pi • pu • pe • po' ] },
-      { id: 'k_yoon', name: 'Yoon', rows: [ 'kya • kyu • kyo', 'gya • gyu • gyo', 'sha • shu • sho', 'ja • ju • jo', 'cha • chu • cho', 'nya • nyu • nyo', 'mya • myu • myo', 'rya • ryu • ryo', 'hya • hyu • hyo', 'bya • byu • byo', 'pya • pyu • pyo' ] },
-      { id: 'k_foreign', name: 'Foreign sound', rows: [ 'fa • fi • fe • fo • fyu', 'wi • we • wo', 'va • vi • vu • ve • vo', 'ti • tu', 'di • du', 'she • shi', 'che • je', 'tsa • tsi • tse • tso' ] }
+      { id: 'k_base', name: 'Base', rows: [ 'a • i • u • e • o', 'ka • ki • ku • ke • ko', 'sa • shi • su • se • so', 'ta • chi • tsu • te • to', 'na • ni • nu • ne • no', 'ha • hi • fu • he • ho', 'ma • mi • mu • me • mo', 'ya • yu • yo', 'ra • ri • ru • re • ro', 'wa • wo • n' ], kanaRows: [ 'ア • イ • ウ • エ • オ', 'カ • キ • ク • ケ • コ', 'サ • シ • ス • セ • ソ', 'タ • チ • ツ • テ • ト', 'ナ • ニ • ヌ • ネ • ノ', 'ハ • ヒ • フ • ヘ • ホ', 'マ • ミ • ム • メ • モ', 'ヤ • ユ • ヨ', 'ラ • リ • ル • レ • ロ', 'ワ • ヲ • ン' ] },
+      { id: 'k_dakuon', name: 'Dakuon', rows: [ 'ga • gi • gu • ge • go', 'za • ji • zu • ze • zo', 'da • ji • zu • de • do', 'ba • bi • bu • be • bo', 'pa • pi • pu • pe • po' ], kanaRows: [ 'ガ • ギ • グ • ゲ • ゴ', 'ザ • ジ • ズ • ゼ • ゾ', 'ダ • ヂ • ヅ • デ • ド', 'バ • ビ • ブ • ベ • ボ', 'パ • ピ • プ • ペ • ポ' ] },
+      { id: 'k_yoon', name: 'Yoon', rows: [ 'kya • kyu • kyo', 'gya • gyu • gyo', 'sha • shu • sho', 'ja • ju • jo', 'cha • chu • cho', 'nya • nyu • nyo', 'mya • myu • myo', 'rya • ryu • ryo', 'hya • hyu • hyo', 'bya • byu • byo', 'pya • pyu • pyo' ], kanaRows: [ 'キャ • キュ • キョ', 'ギャ • ギュ • ギョ', 'シャ • シュ • ショ', 'ジャ • ジュ • ジョ', 'チャ • チュ • チョ', 'ニャ • ニュ • ニョ', 'ミャ • ミュ • ミョ', 'リャ • リュ • リョ', 'ヒャ • ヒュ • ヒョ', 'ビャ • ビュ • ビョ', 'ピャ • ピュ • ピョ' ] },
+      { id: 'k_foreign', name: 'Foreign sound', rows: [ 'fa • fi • fe • fo • fyu', 'wi • we • wo', 'va • vi • vu • ve • vo', 'ti • tu', 'di • du', 'she • shi', 'che • je', 'tsa • tsi • tse • tso' ], kanaRows: [ 'ファ • フィ • フェ • フォ • フュ', 'ウィ • ウェ • ウォ', 'ヴァ • ヴィ • ヴ • ヴェ • ヴォ', 'ティ • トゥ', 'ディ • ドゥ', 'シェ • シィ', 'チェ • ジェ', 'ツァ • ツィ • ツェ • ツォ' ] }
     ]
   }
+};
+
+const RowItem = ({ row, kanaRow, isSelected, toggleRow }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <label 
+      className="flex items-center gap-4 cursor-pointer group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative flex items-center justify-center">
+        <input 
+          type="checkbox" 
+          checked={isSelected}
+          onChange={() => toggleRow(row)}
+          className="appearance-none w-4 h-4 rounded-sm border border-gray-500 bg-transparent checked:bg-white checked:border-white transition-all cursor-pointer group-hover:border-white"
+        />
+        {isSelected && (
+          <svg className="w-3 h-3 text-black absolute pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        )}
+      </div>
+      <span className="text-[17px] font-mono text-[#aaa] group-hover:text-white transition-colors">
+        {isHovered && kanaRow ? kanaRow : row}
+      </span>
+    </label>
+  );
 };
 
 const GroupSection = ({ group, selectedRows, toggleRow, selectAllInGroup }) => {
@@ -38,23 +67,14 @@ const GroupSection = ({ group, selectedRows, toggleRow, selectAllInGroup }) => {
       
       {open && (
         <div className="pl-6 space-y-3 mb-4">
-          {group.rows.map((row) => (
-            <label key={row} className="flex items-center gap-4 cursor-pointer group">
-              <div className="relative flex items-center justify-center">
-                <input 
-                  type="checkbox" 
-                  checked={selectedRows.includes(row)}
-                  onChange={() => toggleRow(row)}
-                  className="appearance-none w-4 h-4 rounded-sm border border-gray-500 bg-transparent checked:bg-white checked:border-white transition-all cursor-pointer group-hover:border-white"
-                />
-                {selectedRows.includes(row) && (
-                  <svg className="w-3 h-3 text-black absolute pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                )}
-              </div>
-              <span className="text-[17px] font-mono text-[#aaa] group-hover:text-white transition-colors">{row}</span>
-            </label>
+          {group.rows.map((row, idx) => (
+            <RowItem 
+              key={row} 
+              row={row} 
+              kanaRow={group.kanaRows ? group.kanaRows[idx] : row} 
+              isSelected={selectedRows.includes(row)} 
+              toggleRow={toggleRow} 
+            />
           ))}
           
           <button 

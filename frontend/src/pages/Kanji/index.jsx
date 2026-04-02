@@ -12,7 +12,10 @@ const units = [
 ];
 
 const KanjiCard = ({ char, on, kun, meaning }) => (
-  <div className="p-5 border-b border-white/10 last:border-b-0 space-y-4 hover:bg-white/[0.02] transition-colors cursor-pointer">
+  <div 
+    onClick={() => window.open(`https://thekanjimap.com/`, '_blank')}
+    className="p-5 border-b border-white/10 last:border-b-0 space-y-4 hover:bg-white/[0.02] transition-colors cursor-pointer"
+  >
     <div className="flex gap-4 items-start">
       {/* Kanji Square */}
       <div className="relative w-[100px] h-[100px] shrink-0 border border-gray-600 rounded-lg flex items-center justify-center bg-[#242424] overflow-hidden">
@@ -94,7 +97,7 @@ export default function KanjiPage() {
   const [lessons, setLessons] = useState([]);
   const [kanjiByLesson, setKanjiByLesson] = useState({});
   const [loading, setLoading] = useState(false);
-  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const [selectedLessonIds, setSelectedLessonIds] = useState([]);
   const [welcomeOpen, setWelcomeOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -113,7 +116,9 @@ export default function KanjiPage() {
           kanjiMap[lesson.LessonID] = kanjiData || [];
         }
         setKanjiByLesson(kanjiMap);
-        if (lessonData.length > 0) setSelectedLessonId(lessonData[0].LessonID);
+        if (lessonData.length > 0) {
+          setSelectedLessonIds([]);
+        }
       } catch (error) {
         console.error("Error loading Kanji data:", error);
       } finally {
@@ -124,11 +129,26 @@ export default function KanjiPage() {
   }, [activeUnitId]);
 
   const handleStart = (playType) => {
-    if (selectedLessonId) {
-      navigate('/training/setup', { state: { lessonId: selectedLessonId, type: 'Kanji', playType } });
+    if (selectedLessonIds.length > 0) {
+      navigate('/training/setup', { state: { lessonIds: selectedLessonIds, type: 'Kanji', playType } });
     } else {
-      alert("Please select a valid level first.");
+      alert("Please select at least 1 level first.");
     }
+  };
+
+  const handleQuickSelect = () => {
+    if (lessons && lessons.length > 0) {
+      const allIds = lessons.map(l => l.LessonID);
+      if (selectedLessonIds.length === allIds.length) {
+        setSelectedLessonIds([]); 
+      } else {
+        setSelectedLessonIds(allIds);
+      }
+    }
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedLessonIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
   return (
@@ -151,7 +171,7 @@ export default function KanjiPage() {
             <div className="text-[#a0a0a0] text-[15px] leading-relaxed mt-4 pl-8 space-y-1">
               <p>This is the place where you can learn and practice the main component of the Japanese writing system - the kanji characters.</p>
               <p>To begin, select at least 1 level, select your training mode, then hit Go! below and start training!</p>
-              <p className="mt-2 text-[#ccc]">New: click on a kanji character to find out more about it on Kanji Heatmap!</p>
+              <p className="mt-2 text-[#ccc]">New: click on a kanji character to find out more about it on <a href="https://thekanjimap.com/" target="_blank" rel="noopener noreferrer" className="underline cursor-pointer hover:text-white">Kanji Heatmap</a>!</p>
             </div>
           )}
         </div>
@@ -189,6 +209,7 @@ export default function KanjiPage() {
 
         {/* Quick Select Button */}
         <button
+          onClick={handleQuickSelect}
           className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-b from-[#b0b0b0] to-[#999] text-black text-[15px] font-bold shadow-[0_4px_0_rgba(120,120,120,1)] active:shadow-[0_0px_0_rgba(120,120,120,1)] active:translate-y-1 transition-all"
         >
           <MousePointer2 size={16} className="fill-black" />
@@ -216,8 +237,8 @@ export default function KanjiPage() {
                      key={lesson.LessonID}
                      title={lesson.Title}
                      lessonId={lesson.LessonID}
-                     isSelected={selectedLessonId === lesson.LessonID}
-                     onSelect={setSelectedLessonId}
+                     isSelected={selectedLessonIds.includes(lesson.LessonID)}
+                     onSelect={toggleSelect}
                      kanji={kanjiByLesson[lesson.LessonID] || []}
                    />
                  ))

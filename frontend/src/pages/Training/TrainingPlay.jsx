@@ -6,7 +6,7 @@ import { getQuestions, saveTrainingStats } from '../../api/learningApi';
 export default function TrainingPlay() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { quizId, sessionId, mode, lessonTitle, type, playType = 'classic', difficulty, blitzTime } = location.state || {};
+  const { quizId, quizIds, sessionId, mode, lessonTitle, type, playType = 'classic', difficulty, blitzTime } = location.state || {};
 
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,7 +36,8 @@ export default function TrainingPlay() {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (!quizId) {
+    const idsToFetch = quizIds?.length > 0 ? quizIds : (quizId ? [quizId] : []);
+    if (idsToFetch.length === 0) {
       navigate('/');
       return;
     }
@@ -44,8 +45,18 @@ export default function TrainingPlay() {
     const loadQuestions = async () => {
       try {
         setLoading(true);
-        const data = await getQuestions(quizId);
-        setQuestions(data.questions || []);
+        let allQuestions = [];
+        for (const id of idsToFetch) {
+           const data = await getQuestions(id);
+           if (data && data.questions) {
+              allQuestions = [...allQuestions, ...data.questions];
+           }
+        }
+        
+        // Shuffle the combined questions
+        allQuestions.sort(() => Math.random() - 0.5);
+        
+        setQuestions(allQuestions);
       } catch (error) {
         console.error("Error fetching questions:", error);
       } finally {
@@ -54,7 +65,7 @@ export default function TrainingPlay() {
     };
 
     loadQuestions();
-  }, [quizId]);
+  }, [quizId, quizIds]);
 
   // Reset states for each new question
   useEffect(() => {

@@ -1,16 +1,36 @@
-# React + Vite
+# 🌸 Japanese Learning Application - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend component of the Japanese Learning Web Application, built with **React 19**, **Vite**, and **Tailwind CSS**. 
+For full project documentation, including backend setup and feature overview, please refer to the [Root README](../README.md).
 
-Currently, two official plugins are available:
+## 🚀 Built With
+- **[React](https://react.dev/)**: For building dynamic user interfaces.
+- **[Vite](https://vitejs.dev/)**: For an extremely fast development environment and optimized builds.
+- **[Tailwind CSS v4](https://tailwindcss.com/)**: For rapid, utility-first UI styling.
+- **[React Router](https://reactrouter.com/)**: For client-side routing.
+- **[React OAuth Google](https://react-oauth.vercel.app/) & [Facebook Login](https://github.com/keppelen/react-facebook-login)**: For secure social authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Quick Start
 
-## React Compiler
+### 1. Installation
+Install all dependencies using npm:
+```bash
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Environment Variables
+Create a `.env` file in the `frontend/` directory and define your development variables:
+```env
+# URL to your backend API
+VITE_API_URL=http://localhost:5000/api
 
-## Expanding the ESLint configuration
+# Authentication Client IDs
+VITE_GOOGLE_CLIENT_ID=your_google_id_here
+VITE_FACEBOOK_APP_ID=your_facebook_id_here
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3. Start Development Server
+```bash
+npm run dev
+```
+The client will start at `http://localhost:5173`.
