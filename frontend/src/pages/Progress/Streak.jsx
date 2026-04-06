@@ -88,8 +88,8 @@ const WeekView = ({ activeDates }) => {
   });
 
   return (
-    <div className="px-8 py-6">
-      <div className="flex justify-center gap-5">
+    <div className="px-4 sm:px-8 py-6">
+      <div className="flex justify-center flex-wrap gap-3 sm:gap-5">
         {DAYS.map((d, i) => {
           const isActive = activeDates.has(weekDates[i]);
           return (
@@ -267,7 +267,7 @@ export default function StreakTab() {
       <h2 className="text-[32px] font-bold text-white">Visit Streak</h2>
 
       {/* 3 stat cards */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <StatCard label="Current Streak" icon={<Flame size={20} />}    value={currentStreak} unit="day" sub={currentStreak > 0 ? "Keep it going!" : "Start your streak today!"} />
         <StatCard label="Longest Streak" icon={<Trophy size={20} />}   value={longestStreak} unit="day" sub="You're at your best!"   />
         <StatCard label="Total Visits"   icon={<Calendar size={20} />} value={totalVisits} unit="day" sub="Days you've practiced"  />

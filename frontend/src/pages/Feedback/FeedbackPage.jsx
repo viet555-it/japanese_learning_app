@@ -64,53 +64,55 @@ function FeedCard({ post, onUpvote }) {
   };
 
   return (
-    <div className="w-full rounded-2xl border border-white/[0.06] bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-200 p-8 flex gap-6">
+    <div className="w-full rounded-2xl border border-white/[0.06] bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-200 p-4 sm:p-8 flex gap-3 sm:gap-6">
       {/* Vote column */}
-      <div className="flex flex-col items-center gap-2 min-w-[52px]">
+      <div className="flex flex-col items-center gap-1 sm:gap-2 min-w-[40px] sm:min-w-[52px]">
         <button
           onClick={handleVote}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-110 ${voted ? 'bg-[var(--accent-color)]/20 text-[var(--accent-color)]' : 'bg-white/5 text-white/40 hover:text-[var(--accent-color)]'}`}
+          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all hover:scale-110 ${voted ? 'bg-[var(--accent-color)]/20 text-[var(--accent-color)]' : 'bg-white/5 text-white/40 hover:text-[var(--accent-color)]'}`}
         >
-          <ChevronUp size={22} strokeWidth={2.5} />
+          <ChevronUp size={20} strokeWidth={2.5} />
         </button>
-        <span className={`text-[20px] font-black leading-none ${voted ? 'text-[var(--accent-color)]' : 'text-white/50'}`}>{votes}</span>
-        <button className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 text-white/20 hover:text-white/50 transition-all">
-          <ChevronDown size={22} strokeWidth={2.5} />
+        <span className={`text-[16px] sm:text-[20px] font-black leading-none ${voted ? 'text-[var(--accent-color)]' : 'text-white/50'}`}>{votes}</span>
+        <button className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center bg-white/5 text-white/20 hover:text-white/50 transition-all">
+          <ChevronDown size={20} strokeWidth={2.5} />
         </button>
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-4 mb-5">
-          <div className="flex items-center gap-3">
-            <UserAvatar name={post.author_name} avatarUrl={post.author_avatar} size={42} />
-            <div>
-              <p className="font-bold text-[16px] text-white/90 leading-none mb-1.5">{post.author_name || 'Anonymous'}</p>
-              <p className="text-white/35 text-[13px]">{timeAgo(post.created_at)}</p>
+        {/* Header row */}
+        <div className="flex items-start justify-between gap-2 mb-3 sm:mb-5 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <UserAvatar name={post.author_name} avatarUrl={post.author_avatar} size={36} />
+            <div className="min-w-0">
+              <p className="font-bold text-[14px] sm:text-[16px] text-white/90 leading-none mb-1 truncate">{post.author_name || 'Anonymous'}</p>
+              <p className="text-white/35 text-[12px]">{timeAgo(post.created_at)}</p>
             </div>
           </div>
-          <span className={`text-[11px] font-black uppercase tracking-[0.12em] px-3 py-1.5 rounded-full border flex-shrink-0 ${catClass}`}>
+          <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.1em] px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border flex-shrink-0 ${catClass}`}>
             {post.category}
           </span>
         </div>
 
-        <div className="flex items-start gap-4 mb-5">
-          <span className="text-[32px] leading-none flex-shrink-0">{ratingEmoji}</span>
-          <p className="text-[16px] text-white/70 leading-relaxed">{post.description}</p>
+        {/* Body */}
+        <div className="flex items-start gap-2 sm:gap-4 mb-3 sm:mb-5">
+          <span className="text-[24px] sm:text-[32px] leading-none flex-shrink-0">{ratingEmoji}</span>
+          <p className="text-[14px] sm:text-[16px] text-white/70 leading-relaxed break-words min-w-0">{post.description}</p>
         </div>
 
         {post.image_data && (
-          <div className="mb-5 rounded-xl overflow-hidden max-w-md border border-white/10">
+          <div className="mb-3 sm:mb-5 rounded-xl overflow-hidden max-w-xs sm:max-w-md border border-white/10">
             <img src={post.image_data} alt="Evidence" className="w-full object-cover hover:opacity-100 opacity-80 transition-opacity" />
           </div>
         )}
 
-        <div className="flex items-center gap-6 text-white/25 text-[14px] pt-4 border-t border-white/[0.05]">
-          <button className="flex items-center gap-2 hover:text-white/60 transition-colors">
-            <MessageSquare size={15} /> Comments
+        <div className="flex items-center gap-4 sm:gap-6 text-white/25 text-[13px] sm:text-[14px] pt-3 sm:pt-4 border-t border-white/[0.05]">
+          <button className="flex items-center gap-1.5 sm:gap-2 hover:text-white/60 transition-colors">
+            <MessageSquare size={14} /> Comments
           </button>
-          <button className="flex items-center gap-2 hover:text-white/60 transition-colors">
-            <Share2 size={15} /> Share
+          <button className="flex items-center gap-1.5 sm:gap-2 hover:text-white/60 transition-colors">
+            <Share2 size={14} /> Share
           </button>
         </div>
       </div>
@@ -145,7 +147,6 @@ export default function FeedbackPage() {
     }
   };
 
-  // Load feed on mount AND whenever user switches to community tab
   useEffect(() => {
     loadFeed();
   }, [tab]);
@@ -165,7 +166,6 @@ export default function FeedbackPage() {
     setSubmitting(true);
     try {
       const result = await submitFeedback({ user_id: user.UserID, rating, category, description, image_data: imageData });
-      // Prepend new post to community feed immediately (optimistic update)
       const newPost = {
         id: result.id || Date.now(),
         author_name: user.DisplayName || user.Username || 'Anonymous',
@@ -178,16 +178,13 @@ export default function FeedbackPage() {
         created_at: new Date().toISOString(),
       };
       setFeedbacks(prev => [newPost, ...prev]);
-      // Reset form
       setDescription('');
       setImageData(null);
       setImagePreview(null);
       setRating('love');
       setCategory(CATEGORIES[1]);
-      // Show success toast
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3500);
-      // Also reload from server to make sure DB persisted it
       setTimeout(() => loadFeed(), 1000);
     } catch (e) {
       console.error('Feedback submit error:', e);
@@ -202,47 +199,52 @@ export default function FeedbackPage() {
 
       {/* Success toast */}
       {success && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-[var(--bg-color)] border border-[var(--accent-color)]/50 rounded-2xl px-8 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-top-4 duration-300">
-          <CheckCircle2 size={24} style={{ color: 'var(--accent-color)' }} />
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90vw] max-w-sm flex items-center gap-3 bg-[var(--bg-color)] border border-[var(--accent-color)]/50 rounded-2xl px-5 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-top-4 duration-300">
+          <CheckCircle2 size={22} style={{ color: 'var(--accent-color)' }} className="shrink-0" />
           <div>
-            <p className="font-black text-[15px]">Feedback submitted! 🎉</p>
-            <p className="text-[12px] opacity-50">Check Feedback Community to see your post.</p>
+            <p className="font-black text-[14px]">Feedback submitted! 🎉</p>
+            <p className="text-[11px] opacity-50">Check Feedback Community to see your post.</p>
           </div>
         </div>
       )}
 
       {/* ── Header + Tabs ── */}
       <div className="w-full border-b border-white/[0.05]">
-        <div className="px-12 pt-8 pb-0 flex items-end justify-between">
-          <div className="mb-4">
+        <div className="px-4 sm:px-8 md:px-12 pt-5 sm:pt-8 pb-0">
+          {/* Title row */}
+          <div className="mb-3 sm:mb-4">
             <div className="flex items-center gap-3 mb-1">
-              <MessageSquare size={26} style={{ color: 'var(--accent-color)' }} />
-              <h1 className="text-2xl font-black tracking-tight">Feedback</h1>
+              <MessageSquare size={22} style={{ color: 'var(--accent-color)' }} />
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight">Feedback</h1>
             </div>
-            <p className="text-[13px] opacity-40 pl-10">Share your experience &amp; help us improve GoJapan</p>
+            <p className="text-[12px] sm:text-[13px] opacity-40 pl-9 sm:pl-10">Share your experience &amp; help us improve GoJapan</p>
           </div>
 
-          {/* Tabs — right-aligned, bottom-flush */}
-          <div className="flex gap-0 self-end">
+          {/* Tabs */}
+          <div className="flex gap-0">
             <button
               onClick={() => setTab('form')}
-              className={`px-7 py-3 text-[14px] font-bold transition-all border-b-2 flex items-center gap-2 ${
+              className={`flex-1 sm:flex-none px-3 sm:px-7 py-3 text-[13px] sm:text-[14px] font-bold transition-all border-b-2 flex items-center justify-center gap-1.5 sm:gap-2 ${
                 tab === 'form'
                   ? 'border-[var(--accent-color)] text-[var(--accent-color)]'
                   : 'border-transparent opacity-40 hover:opacity-70'
               }`}
             >
-              <Sparkles size={14} /> Submit Feedback
+              <Sparkles size={13} />
+              <span className="hidden sm:inline">Submit Feedback</span>
+              <span className="sm:hidden">Submit</span>
             </button>
             <button
               onClick={() => setTab('community')}
-              className={`px-7 py-3 text-[14px] font-bold transition-all border-b-2 flex items-center gap-2 ${
+              className={`flex-1 sm:flex-none px-3 sm:px-7 py-3 text-[13px] sm:text-[14px] font-bold transition-all border-b-2 flex items-center justify-center gap-1.5 sm:gap-2 ${
                 tab === 'community'
                   ? 'border-[var(--accent-color)] text-[var(--accent-color)]'
                   : 'border-transparent opacity-40 hover:opacity-70'
               }`}
             >
-              <Users size={14} /> Feedback Community
+              <Users size={13} />
+              <span className="hidden sm:inline">Feedback Community</span>
+              <span className="sm:hidden">Community</span>
               {feedbacks.length > 0 && (
                 <span className="text-[11px] font-black bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded-full">{feedbacks.length}</span>
               )}
@@ -253,39 +255,39 @@ export default function FeedbackPage() {
 
       {/* ── FORM TAB ── */}
       {tab === 'form' && (
-        <div className="flex-1 px-12 py-10 animate-in fade-in duration-300">
-          <div className="w-full max-w-5xl space-y-10">
+        <div className="flex-1 px-4 sm:px-8 md:px-12 py-6 sm:py-10 animate-in fade-in duration-300">
+          <div className="w-full max-w-5xl space-y-6 sm:space-y-10">
 
             {/* Rating */}
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-5">How is your experience?</p>
-              <div className="w-full flex gap-4">
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-4">How is your experience?</p>
+              <div className="w-full grid grid-cols-5 gap-2 sm:gap-4">
                 {RATINGS.map(r => (
                   <button
                     key={r.id}
                     onClick={() => setRating(r.id)}
-                    className={`flex-1 flex flex-col items-center gap-3 rounded-2xl py-6 transition-all duration-200 border ${
+                    className={`flex flex-col items-center gap-2 sm:gap-3 rounded-2xl py-4 sm:py-6 transition-all duration-200 border ${
                       rating === r.id
                         ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/10 scale-[1.04]'
                         : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] hover:scale-[1.02]'
                     }`}
                   >
-                    <span className="text-5xl">{r.emoji}</span>
-                    <span className={`text-[12px] font-black uppercase tracking-widest ${rating === r.id ? 'text-[var(--accent-color)]' : 'opacity-30'}`}>{r.label}</span>
+                    <span className="text-3xl sm:text-5xl">{r.emoji}</span>
+                    <span className={`text-[10px] sm:text-[12px] font-black uppercase tracking-widest ${rating === r.id ? 'text-[var(--accent-color)]' : 'opacity-30'}`}>{r.label}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Category + Image */}
-            <div className="w-full flex gap-6">
+            {/* Category + Image — stacks on mobile */}
+            <div className="w-full flex flex-col sm:flex-row gap-4 sm:gap-6">
               <div className="flex-1">
-                <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-4">Category</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-3 sm:mb-4">Category</p>
                 <div className="relative">
                   <select
                     value={category}
                     onChange={e => setCategory(e.target.value)}
-                    className="w-full appearance-none rounded-2xl px-6 py-4 text-[15px] font-bold outline-none focus:border-[var(--accent-color)] transition-all cursor-pointer border border-white/[0.07]"
+                    className="w-full appearance-none rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-[14px] sm:text-[15px] font-bold outline-none focus:border-[var(--accent-color)] transition-all cursor-pointer border border-white/[0.07]"
                     style={{ color: 'var(--text-color)', background: 'rgba(255,255,255,0.03)' }}
                   >
                     {CATEGORIES.map(c => <option key={c} value={c} style={{ background: '#1a1a1a' }}>{c}</option>)}
@@ -295,18 +297,18 @@ export default function FeedbackPage() {
               </div>
 
               <div className="flex-1">
-                <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-4">Visual Evidence</p>
-                <div className="flex items-center gap-4">
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-3 sm:mb-4">Visual Evidence</p>
+                <div className="flex items-center gap-3">
                   <input ref={fileRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                   <button
                     onClick={() => fileRef.current?.click()}
-                    className="h-[54px] px-6 rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.07] hover:border-[var(--accent-color)] transition-all flex items-center gap-3 group"
+                    className="flex-1 sm:flex-none h-[50px] sm:h-[54px] px-4 sm:px-6 rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.07] hover:border-[var(--accent-color)] transition-all flex items-center gap-2 sm:gap-3 group"
                   >
-                    <ImagePlus size={20} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <span className="text-[14px] font-bold opacity-50 group-hover:opacity-100 transition-opacity">Upload image</span>
+                    <ImagePlus size={18} className="opacity-50 group-hover:opacity-100 transition-opacity shrink-0" />
+                    <span className="text-[13px] sm:text-[14px] font-bold opacity-50 group-hover:opacity-100 transition-opacity truncate">Upload image</span>
                   </button>
                   {imagePreview && (
-                    <div className="relative h-[54px] w-[80px] rounded-2xl overflow-hidden border border-white/10">
+                    <div className="relative h-[50px] w-[70px] sm:h-[54px] sm:w-[80px] rounded-2xl overflow-hidden border border-white/10 shrink-0">
                       <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
                       <button
                         onClick={() => { setImageData(null); setImagePreview(null); }}
@@ -322,13 +324,13 @@ export default function FeedbackPage() {
 
             {/* Description */}
             <div className="w-full">
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-4">Tell us more...</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] opacity-40 mb-3 sm:mb-4">Tell us more...</p>
               <textarea
                 value={description}
                 onChange={e => setDescription(e.target.value)}
                 placeholder="Provide specific details about your experience. Be as technical or descriptive as needed..."
-                rows={7}
-                className="w-full rounded-2xl px-7 py-5 text-[15px] outline-none transition-all resize-none leading-relaxed border border-white/[0.07] focus:border-[var(--accent-color)]"
+                rows={6}
+                className="w-full rounded-2xl px-4 sm:px-7 py-4 sm:py-5 text-[14px] sm:text-[15px] outline-none transition-all resize-none leading-relaxed border border-white/[0.07] focus:border-[var(--accent-color)]"
                 style={{ color: 'var(--text-color)', background: 'rgba(255,255,255,0.025)' }}
               />
             </div>
@@ -337,16 +339,16 @@ export default function FeedbackPage() {
             <button
               onClick={handleSubmit}
               disabled={submitting || !description.trim()}
-              className="w-full bg-white text-black flex items-center justify-center gap-3 text-[17px] py-5 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full bg-white text-black flex items-center justify-center gap-3 text-[15px] sm:text-[17px] py-4 sm:py-5 disabled:opacity-40 disabled:cursor-not-allowed rounded-2xl"
             >
               {submitting
                 ? <><div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" /> Sending...</>
-                : <><Send size={18} /> Send Feedback</>
+                : <><Send size={16} /> Send Feedback</>
               }
             </button>
 
             {!user && (
-              <p className="text-center text-[13px] opacity-40">⚠ You need to be logged in to submit feedback.</p>
+              <p className="text-center text-[12px] sm:text-[13px] opacity-40">⚠ You need to be logged in to submit feedback.</p>
             )}
           </div>
         </div>
@@ -354,8 +356,8 @@ export default function FeedbackPage() {
 
       {/* ── COMMUNITY TAB ── */}
       {tab === 'community' && (
-        <div className="flex-1 px-12 py-10 animate-in fade-in duration-300">
-          <div className="w-full max-w-5xl space-y-5">
+        <div className="flex-1 px-4 sm:px-8 md:px-12 py-6 sm:py-10 animate-in fade-in duration-300">
+          <div className="w-full max-w-5xl space-y-4 sm:space-y-5">
             {loadingFeed ? (
               <div className="py-32 flex flex-col items-center gap-5 opacity-40">
                 <div className="w-10 h-10 border-2 border-white/20 border-t-[var(--accent-color)] rounded-full animate-spin" />

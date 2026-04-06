@@ -7,6 +7,23 @@
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  /* Improve touch tap on mobile */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Dynamic viewport height for mobile browsers */
+@layer utilities {
+  .h-dvh {
+    height: 100dvh;
   }
 }
 

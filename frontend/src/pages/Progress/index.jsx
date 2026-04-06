@@ -25,12 +25,12 @@ export default function ProgressPage() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`
-                flex-1 flex items-center justify-center gap-2.5 py-5 text-[17px] font-semibold transition-all relative
+                flex-1 flex items-center justify-center gap-1.5 sm:gap-2.5 py-4 sm:py-5 text-[14px] sm:text-[17px] font-semibold transition-all relative
                 ${isActive ? 'text-white' : 'text-[#555] hover:text-[#999]'}
               `}
             >
               <span className={isActive ? 'text-white' : 'text-[#555]'}>{tab.icon}</span>
-              {tab.label}
+              <span className="hidden sm:inline">{tab.label}</span>
               {isActive && (
                 <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white rounded-full" />
               )}
@@ -40,7 +40,7 @@ export default function ProgressPage() {
       </div>
 
       {/* Content */}
-      <div className="px-8 py-10 flex-1">
+      <div className="px-4 sm:px-8 py-6 sm:py-10 flex-1">
 
         {/* Title — ẩn khi đang ở tab Streak */}
          {activeTab === 'stats' && (

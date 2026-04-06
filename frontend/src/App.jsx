@@ -12,7 +12,7 @@ import GlobalEffects from "./components/effects/GlobalEffects";
 import PreferencesPage from "./pages/Preferences/PreferencesPage";
 import FeedbackPage from "./pages/Feedback/FeedbackPage";
 
-// Training Pages
+// Training Pages — rendered outside MainLayout for true full-screen
 import TrainingSetup from "./pages/Training/TrainingSetup";
 import TrainingPlay from "./pages/Training/TrainingPlay";
 import TrainingStats from "./pages/Training/TrainingStats";
@@ -60,6 +60,9 @@ function AppContent() {
   const isHome = location.pathname === "/";
   const isAuth = location.pathname === "/login" || location.pathname === "/register";
 
+  // Training routes: full-screen, no sidebar, no mobile topbar
+  const isTraining = location.pathname.startsWith("/training/");
+
   if (isHome) {
     return (
       <Routes>
@@ -77,6 +80,19 @@ function AppContent() {
     );
   }
 
+  // Training pages: protected but rendered WITHOUT MainLayout
+  if (isTraining) {
+    return (
+      <ProtectedRoute>
+        <Routes>
+          <Route path="/training/setup" element={<TrainingSetup />} />
+          <Route path="/training/play" element={<TrainingPlay />} />
+          <Route path="/training/stats" element={<TrainingStats />} />
+        </Routes>
+      </ProtectedRoute>
+    );
+  }
+
   return (
     <ProtectedRoute>
       <MainLayout>
@@ -87,11 +103,6 @@ function AppContent() {
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/preferences" element={<PreferencesPage />} />
           <Route path="/feedback" element={<FeedbackPage />} />
-          
-          {/* New Training Routes */}
-          <Route path="/training/setup" element={<TrainingSetup />} />
-          <Route path="/training/play" element={<TrainingPlay />} />
-          <Route path="/training/stats" element={<TrainingStats />} />
         </Routes>
       </MainLayout>
     </ProtectedRoute>

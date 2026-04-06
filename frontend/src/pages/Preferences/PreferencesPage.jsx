@@ -87,7 +87,7 @@ export default function PreferencesPage() {
   const glassHeader = hasBg ? 'bg-black/70 backdrop-blur-[24px] border border-white/10 p-4 px-6 rounded-[2rem] shadow-xl' : '';
 
   return (
-    <div className="w-full max-w-[1200px] px-8 lg:px-16 py-10 pb-40 min-h-screen text-[var(--text-color)] font-sans">
+    <div className="w-full max-w-[1200px] px-4 md:px-8 lg:px-16 py-6 md:py-10 pb-40 min-h-screen text-[var(--text-color)] font-sans">
       
       {/* Header & Tabs Area */}
       <div className={`flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6 ${glassHeader}`}>

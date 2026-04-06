@@ -157,7 +157,7 @@ export default function KanaPage() {
 
   return (
     <div className="min-h-screen bg-[#1f1f1f] text-white flex flex-col relative pb-32 font-sans">
-      <div className="px-8 py-8 space-y-6 flex-1 max-w-6xl w-full">
+      <div className="px-4 md:px-8 py-6 md:py-8 space-y-6 flex-1 max-w-6xl w-full">
 
         {/* Header */}
         <div className="flex items-center gap-3">
@@ -189,7 +189,7 @@ export default function KanaPage() {
         </button>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
           
           {/* Hiragana Column */}
           <div className="bg-[#242424] rounded-xl p-6 border border-[#303030]">
@@ -233,25 +233,26 @@ export default function KanaPage() {
       </div>
 
       {/* Bottom Fixed Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-[#1f1f1f] border-t border-[#333] p-6 z-40">
-        <div className="max-w-6xl mx-auto flex gap-4">
+      <div className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-[#1f1f1f] border-t border-[#333] px-4 py-4 md:p-6 z-40">
+        <div className="max-w-6xl mx-auto flex gap-2 md:gap-4">
           <button 
             onClick={() => handleStart('blitz')}
-            className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 bg-white text-black opacity-80 hover:opacity-100 text-[15px]"
+            className="flex-1 md:max-w-[200px] flex items-center justify-center gap-2 py-3 md:py-4 bg-white text-black opacity-80 hover:opacity-100 text-[14px] md:text-[15px]"
           >
             <Zap size={18} className="fill-black" />
-            Blitz
+            <span className="hidden sm:inline">Blitz</span>
+            <span className="sm:hidden">Blitz</span>
           </button>
           <button 
             onClick={() => handleStart('gauntlet')}
-            className="flex-1 max-w-[200px] flex items-center justify-center gap-2 py-4 bg-white text-black opacity-80 hover:opacity-100 text-[15px]"
+            className="flex-1 md:max-w-[200px] flex items-center justify-center gap-2 py-3 md:py-4 bg-white text-black opacity-80 hover:opacity-100 text-[14px] md:text-[15px]"
           >
             <Sword size={18} className="fill-black" />
-            Gauntlet
+            <span>Gauntlet</span>
           </button>
           <button 
             onClick={() => handleStart('classic')}
-            className="flex-1 flex items-center justify-center gap-2 py-4 bg-white text-black text-[18px]"
+            className="flex-1 flex items-center justify-center gap-2 py-3 md:py-4 bg-white text-black text-[16px] md:text-[18px]"
           >
             <Play size={20} className="fill-black" />
             Classic

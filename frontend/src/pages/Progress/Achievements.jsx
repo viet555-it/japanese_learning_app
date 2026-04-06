@@ -311,16 +311,16 @@ export default function AchievementsTab() {
       </div>
 
       {/* 4 stat cards */}
-      <div className="flex gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[
           { value: totalUnlocked, label: 'Unlocked' },
           { value: achievements.length, label: 'Total' },
           { value: totalXP, label: 'XP' },
           { value: level, label: 'Level' },
         ].map(s => (
-          <div key={s.label} className="flex-1 bg-[#141414] rounded-xl border border-white/5 py-6 flex flex-col items-center gap-1">
-            <span className="text-[36px] font-bold text-white">{s.value}</span>
-            <span className="text-[14px] text-[#666]">{s.label}</span>
+          <div key={s.label} className="bg-[#141414] rounded-xl border border-white/5 py-5 sm:py-6 flex flex-col items-center gap-1">
+            <span className="text-[28px] sm:text-[36px] font-bold text-white">{s.value}</span>
+            <span className="text-[13px] sm:text-[14px] text-[#666]">{s.label}</span>
           </div>
         ))}
       </div>
@@ -350,26 +350,26 @@ export default function AchievementsTab() {
       </div>
 
       {/* Achievement grid */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map(a => <AchievementCard key={a.id} {...a} onClaim={handleClaim} />)}
       </div>
 
       {/* Achievement Management */}
-      <div className="bg-[#141414] rounded-xl border border-white/5 p-6">
+      <div className="bg-[#141414] rounded-xl border border-white/5 p-5 sm:p-6">
         <div className="flex items-center gap-2 mb-2">
           <RefreshCw size={18} className="text-white" />
           <h3 className="text-[18px] font-bold text-white">Achievement Management</h3>
         </div>
         <p className="text-[#666] text-[15px] mb-4">Check for any missed achievements based on your current progress.</p>
-        <div className="bg-[#1a1a1a] rounded-xl border border-white/5 px-5 py-4 flex items-center justify-between">
+        <div className="bg-[#1a1a1a] rounded-xl border border-white/5 px-4 sm:px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
           <div>
             <p className="text-[16px] font-semibold text-white">Recalculate Achievements</p>
-            <p className="text-[#555] text-[14px]">Scan your progress and unlock any achievements you may have earned</p>
+            <p className="text-[#555] text-[13px] sm:text-[14px]">Scan your progress and unlock any achievements you may have earned</p>
           </div>
           <button 
             onClick={handleRecalculate}
             disabled={loading}
-            className={`flex items-center gap-2 border text-white px-5 py-2.5 rounded-xl text-[15px] font-semibold transition-all
+            className={`w-full sm:w-auto flex items-center justify-center gap-2 border text-white px-5 py-2.5 rounded-xl text-[15px] font-semibold transition-all
               ${loading ? 'bg-[#333] border-[#444] text-[#888]' : 'bg-[#222] border-white/10 hover:bg-[#2a2a2a]'}`}
           >
             <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> 

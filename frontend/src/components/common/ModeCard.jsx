@@ -6,9 +6,9 @@ const ModeCard = ({ japanese, title, path, borderRight }) => {
   
   return (
     <div className={`flex-1 flex flex-col items-center justify-center 
-                     py-12 cursor-pointer 
+                     py-8 sm:py-12 cursor-pointer 
                      hover:bg-white/5 transition duration-300
-                     ${borderRight ? 'border-r border-white/20' : ''}`}
+                     ${borderRight ? 'border-b sm:border-b-0 sm:border-r border-white/20' : ''}`}
          onClick={() => navigate(path)}
     >
       <div className="flex items-center gap-4">

@@ -205,7 +205,7 @@ export default function StatsTab() {
             </button>
          </div>
 
-         <div className="flex gap-4 mb-6">
+         <div className="flex flex-col sm:flex-row gap-4 mb-6">
             {/* XP */}
             <div className="flex-1 bg-[#1a1a1a] border border-white/5 rounded-2xl p-4 flex items-center gap-4">
                <div className="w-12 h-12 rounded-2xl bg-[#141414] border border-white/5 flex items-center justify-center text-[#555]">
@@ -256,7 +256,7 @@ export default function StatsTab() {
       </div>
 
       {/* Grid of 4 cards (Bottom) */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
          
          {/* Character Mastery */}
          <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
