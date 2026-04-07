@@ -135,7 +135,7 @@ export default function TrainingStats() {
         {/* Actions Button */}
         <div className="flex gap-6 animate-fadeIn" style={{ animationDelay: '600ms' }}>
            <button 
-             onClick={() => navigate('/')}
+             onClick={() => navigate(type ? `/${type.toLowerCase()}` : '/')}
              className="flex-1 py-6 rounded-2xl bg-[#141414] border border-white/5 text-white font-bold text-xl hover:bg-white/5 hover:border-white/10 transition-all flex items-center justify-center gap-3"
            >
              <Home size={24} />
