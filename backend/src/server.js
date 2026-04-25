@@ -54,7 +54,10 @@ import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 app.use(compression());
-app.use(cors());
+app.use(cors({
+    origin: 'https://gojapan.abc-xyz.tech',
+    credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
